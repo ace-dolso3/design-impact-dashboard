@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design Impact Dashboard — Ace Hardware</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ace: {
+              red:      '#D40029',
+              'red-dk': '#B00022',
+              'red-lt': '#FEF0F0',
+            }
+          },
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'] }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ── Animations ─────────────────────────────────────────────────────────── */
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(18px) } to { opacity:1; transform:none } }
+    @keyframes fadeIn   { from { opacity:0 }                              to { opacity:1 } }
+    @keyframes lineGrow { from { width:0 }                                to { width:100% } }
+    @keyframes dotPop   { 0%{transform:scale(0)} 70%{transform:scale(1.25)} 100%{transform:scale(1)} }
+    @keyframes shimmer  { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
+
+    .anim-fade-up  { animation: fadeUp  .55s cubic-bezier(.22,.68,0,1.2) both }
+    .anim-fade-in  { animation: fadeIn  .4s ease both }
+    .d-1 { animation-delay:.05s } .d-2 { animation-delay:.12s }
+    .d-3 { animation-delay:.20s } .d-4 { animation-delay:.28s }
+    .d-5 { animation-delay:.36s } .d-6 { animation-delay:.44s }
+    .d-7 { animation-delay:.52s } .d-8 { animation-delay:.60s }
+
+    /* ── Cards ───────────────────────────────────────────────────────────────── */
+    .release-card {
+      transition: transform .22s cubic-bezier(.22,.68,0,1.2), box-shadow .22s ease;
+    }
+    .release-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px -8px rgba(0,0,0,.12);
+    }
+
+    /* ── Metric rows ─────────────────────────────────────────────────────────── */
+    .metric-row {
+      transition: background-color .18s ease;
+    }
+    .metric-row:hover { background-color: #F8FAFC; }
+
+    /* ── Timeline ────────────────────────────────────────────────────────────── */
+    @keyframes tlPulse {
+      0%   { transform: scale(1);   opacity: .7; }
+      100% { transform: scale(3.8); opacity: 0;  }
+    }
+
+    .tl-dot {
+      box-shadow: 0 0 0 2px white;
+      transition: transform .25s cubic-bezier(.22,.68,0,1.2);
+      cursor: pointer;
+    }
+    .tl-dot::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: rgba(212,0,41,.55);
+      pointer-events: none;
+      opacity: 0;
+    }
+    .tl-entry:hover .tl-dot {
+      transform: scale(1.9);
+    }
+    .tl-entry:hover .tl-dot::before {
+      animation: tlPulse 1.2s ease-out infinite;
+    }
+
+    .tl-label {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      max-height: 2.85em;
+      line-height: 1.425;
+      transition: max-height .35s cubic-bezier(.22,.68,0,1.2);
+    }
+    .tl-entry.tl-expandable:hover .tl-label {
+      -webkit-line-clamp: unset;
+      overflow: visible;
+      max-height: 10em;
+    }
+
+    /* ── Stat cards ──────────────────────────────────────────────────────────── */
+    .stat-card {
+      transition: transform .2s cubic-bezier(.22,.68,0,1.2), box-shadow .2s ease;
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px -4px rgba(0,0,0,.09);
+    }
+
+    /* ── Delta badges ────────────────────────────────────────────────────────── */
+    .badge-pos  { background:#DCFCE7; color:#15803D }
+    .badge-neg  { background:#FEE2E2; color:#DC2626 }
+    .badge-flat { background:#F1F5F9; color:#64748B }
+
+    /* ── Category pills ──────────────────────────────────────────────────────── */
+    .pill-conversion { background:#EFF6FF; color:#1D4ED8 }
+    .pill-engagement { background:#F0FDF4; color:#15803D }
+    .pill-revenue    { background:#FFFBEB; color:#B45309 }
+
+    /* ── Scrollbar (timeline) ────────────────────────────────────────────────── */
+    .tl-scroll::-webkit-scrollbar        { height:3px }
+    .tl-scroll::-webkit-scrollbar-track  { background:#F1F5F9; border-radius:2px }
+    .tl-scroll::-webkit-scrollbar-thumb  { background:#E82D34; border-radius:2px }
+
+    /* ── Progress bar ────────────────────────────────────────────────────────── */
+    .prog-fill {
+      height: 100%;
+      border-radius: 9999px;
+      width: 0%;
+      transition: width 0.75s cubic-bezier(0.22, 0.68, 0, 1.2);
+      opacity: 0.9;
+    }
+
+    /* ── Floating tooltip ────────────────────────────────────────────────────── */
+    #chart-tooltip {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: none;
+      background: #0F172A;
+      color: white;
+      font-size: 11px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      padding: 6px 10px;
+      border-radius: 8px;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+    #chart-tooltip.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    #chart-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: #0F172A;
+    }
+
+    /* ── FAB scroll-to-top ─────────────────────────────────────────────────── */
+    #scroll-top-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: #D40029;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(212,0,41,.35);
+      cursor: pointer;
+      border: none;
+      opacity: 0;
+      transform: translateY(16px);
+      pointer-events: none;
+      transition: opacity .25s ease, transform .25s ease, background .2s ease;
+    }
+    #scroll-top-fab.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    #scroll-top-fab:hover {
+      background: #B00022;
+      box-shadow: 0 6px 20px rgba(212,0,41,.45);
+    }
+
+    /* ── Collapse animation ──────────────────────────────────────────────────── */
+    .card-collapsed {
+      max-height: 0 !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      opacity: 0;
+    }
+
+    /* ── Print ───────────────────────────────────────────────────────────────── */
+    @media print {
+      .no-print { display:none !important }
+      .release-card { break-inside:avoid; page-break-inside:avoid }
+      header { position:static }
+      body { background:white !important }
+      #releases-grid { grid-template-columns: 1fr 1fr }
+    }
+
+    /* ── Reduced motion ──────────────────────────────────────────────────────── */
+    @media (prefers-reduced-motion:reduce) {
+      *, *::before, *::after {
+        animation-duration:.01ms !important;
+        transition-duration:.01ms !important;
+      }
+    }
+
+    body { background:#F8FAFC; font-family:'Inter',sans-serif }
+  </style>
+</head>
+<body class="min-h-screen text-slate-900">
+
+  <!-- ── Header ──────────────────────────────────────────────────────────────── -->
+  <header class="bg-white/90 backdrop-blur border-b border-slate-100 sticky top-0 z-50 no-print">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+
+      <!-- Brand -->
+      <div class="flex items-center gap-3">
+        <svg width="83" height="37" viewBox="0 0 166 74" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Ace Hardware" role="img">
+          <g clip-path="url(#logo-clip)">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M61.3605 72.6027H37.9586L29.729 27.6525L48.0383 3.0094e-06L61.3605 72.6027ZM58.2137 40.9101C58.2091 41.2246 58.1808 41.588 58.148 42.0097C58.0221 43.6291 57.8292 46.1087 58.6531 49.9857C58.6531 49.9857 61.8143 73.5353 85.6286 74C92.4805 73.5277 95.3702 72.215 98.8951 70.4769C112.125 63.9591 114.328 49.3516 114.328 49.3516H101.881C94.6797 65.7144 80.6906 60.2245 80.6906 60.2245L88.5601 22.9917C103.682 23.4074 104.247 37.7509 104.247 37.7509H116.9C116.9 37.7509 117.789 22.6833 103.201 13.7442C100.213 11.9132 95.2866 10.6254 90.4639 10.5119C90.4639 10.5119 63.528 8.81061 58.2137 40.9101ZM166 14.5529L163.531 26.1539H142.34L139.871 37.7532H161.113L158.697 49.3534H137.453L135.036 60.953H156.279L153.81 72.5001H111.017L123.206 14.5529H166ZM24.4824 35.6279L31.3745 72.6027H0L24.4824 35.6279ZM159.851 68.8275C159.851 69.3594 159.46 69.3905 159.02 69.3905H158.398V68.3226H159.105C159.466 68.3226 159.851 68.4022 159.851 68.8275ZM157.88 71.3266H158.398V69.8328H158.997L159.898 71.3266H160.478L159.506 69.8088C160.007 69.7462 160.393 69.4772 160.393 68.8621C160.393 68.1811 159.993 67.881 159.183 67.881H157.88V71.3266ZM161.429 69.5958C161.429 71.034 160.368 72.0932 159.027 72.0932C157.669 72.0932 156.609 71.034 156.609 69.5958C156.609 68.1811 157.669 67.1144 159.027 67.1144C160.368 67.1144 161.429 68.1811 161.429 69.5958ZM159.027 66.6163C157.394 66.6163 156.012 67.881 156.012 69.5958C156.012 71.3266 157.394 72.5912 159.027 72.5912C160.644 72.5912 162.025 71.3266 162.025 69.5958C162.025 67.881 160.644 66.6163 159.027 66.6163Z" fill="#D40029"/>
+          </g>
+          <defs><clipPath id="logo-clip"><rect width="166" height="74" fill="white"/></clipPath></defs>
+        </svg>
+        <div class="w-px h-8 bg-slate-200"></div>
+        <p class="text-sm font-semibold text-slate-500">Design Impact</p>
+      </div>
+
+      <!-- Right -->
+      <div class="flex items-center gap-4">
+        <p id="last-updated" class="text-xs text-slate-400 hidden sm:block"></p>
+        <button
+          onclick="window.print()"
+          class="no-print inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-ace-red hover:bg-ace-red-dk text-white text-sm font-semibold transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-ace-red focus:ring-offset-2"
+          aria-label="Export to PDF"
+        >
+          <span class="material-symbols-outlined text-lg" aria-hidden="true">print</span>
+          Export PDF
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ── Main ────────────────────────────────────────────────────────────────── -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-10">
+
+    <!-- Summary stats -->
+    <section id="summary-stats" class="grid grid-cols-2 md:grid-cols-4 gap-4" aria-label="Summary statistics">
+      <!-- injected -->
+    </section>
+
+    <!-- Timeline -->
+    <section aria-label="Release timeline">
+      <h2 class="text-[10px] font-semibold text-slate-400 uppercase tracking-[.15em] mb-4">Release Timeline</h2>
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm px-6 py-5 anim-fade-in d-3">
+        <div id="timeline" class="w-full">
+          <!-- injected -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Release cards -->
+    <section aria-label="Release impact cards">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-[10px] font-semibold text-slate-400 uppercase tracking-[.15em]">Release Impact</h2>
+        <button id="toggle-all-btn" onclick="toggleAllCards()"
+          class="no-print inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-800 transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-ace-red focus:ring-offset-2">
+          <span class="material-symbols-outlined text-sm" aria-hidden="true">unfold_less</span>
+          <span id="toggle-all-label">Collapse All</span>
+        </button>
+      </div>
+      <div id="releases-grid" class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <!-- injected -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Footer ──────────────────────────────────────────────────────────────── -->
+  <footer class="max-w-7xl mx-auto px-6 py-8 mt-4 border-t border-slate-100">
+    <p class="text-xs text-slate-400 text-center">
+      Design Impact Dashboard &nbsp;·&nbsp; Ace Hardware Design Team &nbsp;·&nbsp; Data sourced from Contentsquare
+    </p>
+  </footer>
+
+  <!-- Scroll-to-top FAB -->
+  <button id="scroll-top-fab" class="no-print" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">
+    <span class="material-symbols-outlined text-2xl" aria-hidden="true">keyboard_arrow_up</span>
+  </button>
+
+  <!-- Shared floating tooltip -->
+  <div id="chart-tooltip" role="tooltip" aria-live="polite"></div>
+
+  <!-- ── Script ──────────────────────────────────────────────────────────────── -->
+  <script>
+  // ─── Helpers ──────────────────────────────────────────────────────────────────
+
+  const ACE_RED   = '#D40029';
+  const BEFORE_BG = '#CBD5E1';
+
+  function fmtDate(d) {
+    return new Date(d + 'T00:00:00').toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });
+  }
+  function fmtShort(d) {
+    return new Date(d + 'T00:00:00').toLocaleDateString('en-US', { month:'short', year:'numeric' });
+  }
+
+  function delta(m) {
+    const raw  = m.after - m.before;
+    const pct  = (raw / m.before) * 100;
+    const good = m.lower_is_better ? raw < 0 : raw > 0;
+    const flat = Math.abs(pct) < 1;
+    return { raw, pct, good, flat };
+  }
+
+  function fmtDelta(raw, unit) {
+    const sign = raw > 0 ? '+' : '';
+    return `${sign}${raw.toFixed(raw % 1 === 0 ? 0 : 1)}${unit}`;
+  }
+
+  function badgeClass(d)    { return d.flat ? 'badge-flat' : d.good ? 'badge-pos' : 'badge-neg' }
+  function badgeArrow(d)    { return d.flat ? '—' : d.good ? '▲' : '▼' }
+  function pillClass(cat)   { return `pill-${cat}` }
+  function pillLabel(cat)   {
+    return { conversion:'Conversion', engagement:'Engagement', revenue:'Revenue' }[cat] || cat;
+  }
+
+  // Material Symbols icons
+  function mIcon(name, cls='') {
+    return `<span class="material-symbols-outlined ${cls}" aria-hidden="true">${name}</span>`;
+  }
+  const icons = {
+    releases: mIcon('deployed_code', 'text-xl'),
+    metrics:  mIcon('monitoring', 'text-xl'),
+    success:  mIcon('trending_up', 'text-xl'),
+    avg:      mIcon('analytics', 'text-xl'),
+  };
+
+  // ─── Stats ────────────────────────────────────────────────────────────────────
+
+  function renderStats(releases) {
+    let metricCount = 0, goodCount = 0, totalAbsPct = 0;
+    releases.forEach(r => r.metrics.forEach(m => {
+      const d = delta(m);
+      metricCount++;
+      if (d.good) goodCount++;
+      totalAbsPct += Math.abs(d.pct);
+    }));
+    const successRate  = Math.round((goodCount / metricCount) * 100);
+    const avgChange    = (totalAbsPct / metricCount).toFixed(1);
+
+    const stats = [
+      { label:'Design Releases',   value: releases.length, suffix:'',  icon: icons.releases, delay:'d-1' },
+      { label:'Metrics Tracked',   value: metricCount,     suffix:'',  icon: icons.metrics,  delay:'d-2' },
+      { label:'Metrics Improved',  value: successRate,     suffix:'%', icon: icons.success,  delay:'d-3' },
+      { label:'Avg. Metric Change',value: avgChange,       suffix:'%', icon: icons.avg,      delay:'d-4' },
+    ];
+
+    document.getElementById('summary-stats').innerHTML = stats.map(s => `
+      <div class="stat-card anim-fade-up ${s.delay} bg-white rounded-2xl border border-slate-100 shadow-sm p-5 cursor-default">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-[.12em]">${s.label}</span>
+          <span class="text-ace-red/70">${s.icon}</span>
+        </div>
+        <div class="flex items-end gap-0.5">
+          <span class="text-4xl font-black text-slate-900 leading-none">${s.value}</span>
+          <span class="text-xl font-bold text-ace-red mb-0.5">${s.suffix}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ─── Timeline ─────────────────────────────────────────────────────────────────
+
+  function renderTimeline(releases) {
+    const sorted = [...releases].sort((a,b) => new Date(a.date) - new Date(b.date));
+    const container = document.getElementById('timeline');
+
+    const items = sorted.map((r, i) => `
+      <div class="tl-entry flex flex-col items-center cursor-pointer"
+           style="flex:1;min-width:100px;max-width:140px"
+           onclick="document.getElementById('card-${r.id}').scrollIntoView({behavior:'smooth',block:'center'})">
+        <button
+          class="tl-dot w-3 h-3 rounded-full bg-ace-red relative z-10 flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-ace-red"
+          aria-label="Jump to ${r.title}"
+          style="animation:dotPop .4s ${.08 + i * .09}s cubic-bezier(.22,.68,0,1.2) both"
+          tabindex="-1"
+        ></button>
+        <div class="mt-2.5 text-center w-full px-1">
+          <p class="text-[9px] text-slate-400 mb-1 font-medium tracking-wide">${fmtShort(r.date)}</p>
+          <p class="tl-label text-[10px] font-semibold text-slate-700">${r.title}</p>
+        </div>
+      </div>
+    `).join('');
+
+    container.innerHTML = `
+      <div class="relative flex items-start justify-between w-full gap-2">
+        <div id="tl-connector" class="absolute h-px bg-slate-200" style="top:5px;left:0;right:0"></div>
+        ${items}
+      </div>
+    `;
+
+    requestAnimationFrame(() => {
+      // Mark entries whose labels are actually clamped (more than 2 lines of text)
+      container.querySelectorAll('.tl-entry').forEach(entry => {
+        const label = entry.querySelector('.tl-label');
+        if (label && label.scrollHeight > label.clientHeight + 1) {
+          entry.classList.add('tl-expandable');
+        }
+      });
+
+      // Trim connector line to span only first dot → last dot
+      const dots = container.querySelectorAll('.tl-dot');
+      const line = document.getElementById('tl-connector');
+      if (dots.length >= 2 && line) {
+        const wrapRect   = line.parentElement.getBoundingClientRect();
+        const firstRect  = dots[0].getBoundingClientRect();
+        const lastRect   = dots[dots.length - 1].getBoundingClientRect();
+        line.style.left  = (firstRect.left  + firstRect.width  / 2 - wrapRect.left)  + 'px';
+        line.style.right = (wrapRect.right  - (lastRect.left   + lastRect.width  / 2)) + 'px';
+      }
+    });
+  }
+
+  // ─── Progress Bars ────────────────────────────────────────────────────────────
+
+  function progressBarHtml(m, ri, mi) {
+    const d       = delta(m);
+    const max     = Math.max(m.before, m.after) * 1.3;
+    const beforeP = ((m.before / max) * 100).toFixed(2);
+    const afterP  = ((m.after  / max) * 100).toFixed(2);
+    const delay   = (ri * 80) + (mi * 55);
+    const fillClr = d.flat ? '#94A3B8' : d.good ? '#16A34A' : '#DC2626';
+    const barId   = `bar-${ri}-${mi}`;
+    const sign    = d.raw > 0 ? '+' : '';
+    const tipClr  = d.flat ? '#94A3B8' : d.good ? '#4ADE80' : '#FCA5A5';
+    const tipTxt  = `Before: ${m.before}${m.unit} → After: ${m.after}${m.unit} &nbsp;<span style="color:${tipClr}">(${sign}${d.raw.toFixed(1)}${m.unit})</span>`;
+
+    return `
+      <div class="flex-1 flex items-center cursor-default"
+           data-tip="${tipTxt.replace(/"/g, '&quot;')}"
+           data-bar-id="${barId}"
+           data-after="${afterP}"
+           data-delay="${delay}">
+        <div class="relative w-full h-[6px] bg-slate-200 rounded-full">
+          <div id="${barId}" class="prog-fill" style="background:${fillClr};transition-delay:${delay}ms"></div>
+          <div class="absolute top-1/2 -translate-y-1/2 w-[2px] h-[13px] bg-slate-400 rounded-full z-10 pointer-events-none"
+               style="left:${beforeP}%"></div>
+        </div>
+      </div>
+    `;
+  }
+
+  function animateBars() {
+    document.querySelectorAll('[data-bar-id]').forEach(wrapper => {
+      const fill = document.getElementById(wrapper.dataset.barId);
+      if (!fill) return;
+      // Double rAF ensures width:0 is painted before transition fires
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          fill.style.width = wrapper.dataset.after + '%';
+        });
+      });
+    });
+  }
+
+  function initTooltips() {
+    const tip = document.getElementById('chart-tooltip');
+    document.querySelectorAll('[data-tip]').forEach(el => {
+      el.addEventListener('mouseenter', e => {
+        tip.innerHTML = el.dataset.tip;
+        const r = el.getBoundingClientRect();
+        tip.style.left = (r.left + r.width / 2) + 'px';
+        tip.style.top  = (r.top - 10) + 'px';
+        tip.style.transform = 'translate(-50%, -100%) translateY(4px)';
+        tip.classList.add('visible');
+        tip.style.transform = 'translate(-50%, -100%) translateY(0)';
+      });
+      el.addEventListener('mouseleave', () => tip.classList.remove('visible'));
+    });
+  }
+
+  // ─── Cards ────────────────────────────────────────────────────────────────────
+
+  function renderCards(releases) {
+    const sorted = [...releases].sort((a,b) => new Date(b.date) - new Date(a.date));
+
+    document.getElementById('releases-grid').innerHTML = sorted.map((r, ri) => {
+      const d_classes = ['d-1','d-2','d-3','d-4','d-5','d-6','d-7','d-8'];
+
+      const metricsHtml = r.metrics.map((m, mi) => {
+        const d = delta(m);
+        return `
+          <div class="metric-row rounded-xl p-4 border border-slate-100 bg-slate-50/60 transition-colors duration-200">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="text-sm font-semibold text-slate-800 truncate">${m.name}</span>
+              </div>
+              <span class="text-[11px] font-bold px-2.5 py-1 rounded-full flex-shrink-0 ml-2 ${badgeClass(d)}">
+                ${badgeArrow(d)} ${fmtDelta(d.raw, m.unit)}
+              </span>
+            </div>
+            <div class="flex items-center gap-4">
+              <!-- Values -->
+              <div class="flex items-center gap-3 flex-shrink-0" style="width:176px">
+                <div class="text-center" style="width:72px">
+                  <p class="text-[10px] text-slate-400 mb-0.5 font-medium">Before</p>
+                  <p class="text-lg font-bold text-slate-500 leading-none">${m.before}<span class="text-xs font-normal ml-px">${m.unit}</span></p>
+                </div>
+                <span class="material-symbols-outlined text-base text-slate-300 flex-shrink-0" aria-hidden="true">arrow_forward</span>
+                <div class="text-center" style="width:72px">
+                  <p class="text-[10px] text-slate-400 mb-0.5 font-medium">After</p>
+                  <p class="text-lg font-bold text-slate-900 leading-none">${m.after}<span class="text-xs font-normal ml-px">${m.unit}</span></p>
+                </div>
+              </div>
+              <!-- Progress bar -->
+              ${progressBarHtml(m, ri, mi)}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <article id="card-${r.id}" class="release-card anim-fade-up ${d_classes[ri] || 'd-8'} bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden relative">
+          <!-- Full-height left border -->
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-ace-red rounded-l-2xl"></div>
+          <!-- Card header -->
+          <div class="px-6 py-5 border-b border-slate-100 cursor-pointer select-none" onclick="toggleCard('${r.id}')">
+            <div class="pl-2 flex items-start justify-between">
+              <div class="flex-1 min-w-0">
+                <p class="text-[10px] font-semibold text-ace-red uppercase tracking-[.12em] mb-1">${fmtDate(r.date)}</p>
+                <h3 class="text-xl font-bold text-slate-900">${r.title}</h3>
+                <p class="text-sm text-slate-500 mt-1.5 leading-relaxed">${r.description}</p>
+              </div>
+              <button class="no-print ml-3 mt-1 flex-shrink-0 p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all duration-200 cursor-pointer focus:outline-none" aria-label="Toggle metrics" onclick="event.stopPropagation(); toggleCard('${r.id}')">
+                <span id="chevron-${r.id}" class="material-symbols-outlined text-xl transition-transform duration-300" aria-hidden="true">expand_less</span>
+              </button>
+            </div>
+          </div>
+          <!-- Metrics (collapsible) -->
+          <div id="metrics-${r.id}" class="p-5 space-y-3 transition-all duration-300 ease-in-out" style="max-height:2000px;overflow:hidden">
+            ${metricsHtml}
+          </div>
+        </article>
+      `;
+    }).join('');
+
+    // Wire tooltips after DOM settles (bars animate on scroll via observeCards)
+    requestAnimationFrame(() => { initTooltips(); });
+  }
+
+  // ─── Intersection observer (lazy animate cards) ────────────────────────────
+
+  function observeCards() {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          // Trigger card fade-in
+          e.target.style.animationPlayState = 'running';
+
+          // Animate progress bars inside this card once it enters view
+          e.target.querySelectorAll('[data-bar-id]').forEach(wrapper => {
+            const fill = document.getElementById(wrapper.dataset.barId);
+            if (!fill) return;
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                fill.style.width = wrapper.dataset.after + '%';
+              });
+            });
+          });
+
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.release-card').forEach(el => {
+      el.style.animationPlayState = 'paused';
+      obs.observe(el);
+    });
+  }
+
+  // ─── Inline data (embedded for local/preview compatibility) ──────────────────
+
+  const RELEASES_DATA = [{"id":"pdp-redesign-jan-2025","title":"PDP Layout Redesign","date":"2025-01-14","description":"Redesigned the product detail page to surface key product specs and reviews above the fold, reducing scroll depth required to reach the add-to-cart button.","metrics":[{"name":"Add-to-Cart Rate","category":"conversion","before":7.8,"after":10.2,"unit":"%"},{"name":"Bounce Rate","category":"engagement","before":44.3,"after":38.1,"unit":"%","lower_is_better":true},{"name":"Time on Page","category":"engagement","before":2.1,"after":2.8,"unit":"min"},{"name":"Revenue per Visitor","category":"revenue","before":3.22,"after":4.01,"unit":"$"}]},{"id":"global-nav-update-feb-2025","title":"Global Navigation Simplification","date":"2025-02-03","description":"Reduced top-level navigation categories from 12 to 7, consolidating overlap and surfacing seasonal promotions. Focused on reducing decision fatigue at the entry point.","metrics":[{"name":"Click-Through Rate","category":"conversion","before":18.4,"after":21.9,"unit":"%"},{"name":"Bounce Rate","category":"engagement","before":39.7,"after":37.2,"unit":"%","lower_is_better":true},{"name":"Scroll Depth","category":"engagement","before":42.0,"after":44.5,"unit":"%"}]},{"id":"checkout-flow-mar-2025","title":"Checkout Flow Optimization","date":"2025-03-10","description":"Collapsed a 4-step checkout into 2 steps by combining shipping and payment on a single screen. Reduced required form fields from 14 to 9 by auto-populating known data.","metrics":[{"name":"Checkout Completion Rate","category":"conversion","before":61.4,"after":71.8,"unit":"%"},{"name":"Cart Abandonment Rate","category":"conversion","before":38.6,"after":28.2,"unit":"%","lower_is_better":true},{"name":"Average Order Value","category":"revenue","before":47.20,"after":51.60,"unit":"$"},{"name":"Revenue per Visitor","category":"revenue","before":3.89,"after":4.72,"unit":"$"}]},{"id":"search-results-apr-2025","title":"Search Results Page Redesign","date":"2025-04-22","description":"Introduced a persistent filter panel, larger product thumbnails, and inline product ratings on search results. Aimed at reducing pogo-sticking between search and PDP.","metrics":[{"name":"Add-to-Cart Rate","category":"conversion","before":5.1,"after":5.4,"unit":"%"},{"name":"Bounce Rate","category":"engagement","before":51.2,"after":49.8,"unit":"%","lower_is_better":true},{"name":"Time on Page","category":"engagement","before":1.4,"after":1.6,"unit":"min"},{"name":"Scroll Depth","category":"engagement","before":38.0,"after":41.2,"unit":"%"}]},{"id":"homepage-hero-jun-2025","title":"Homepage Hero Refresh","date":"2025-06-09","description":"Replaced static seasonal banner with a dynamic hero featuring personalized category shortcuts based on browsing history. Tested with 50% of traffic before full rollout.","metrics":[{"name":"Click-Through Rate","category":"conversion","before":9.3,"after":14.7,"unit":"%"},{"name":"Bounce Rate","category":"engagement","before":36.1,"after":33.4,"unit":"%","lower_is_better":true},{"name":"Revenue per Visitor","category":"revenue","before":4.10,"after":4.38,"unit":"$"},{"name":"Average Order Value","category":"revenue","before":49.80,"after":48.90,"unit":"$","lower_is_better":false}]},{"id":"mobile-cart-aug-2025","title":"Mobile Cart Experience","date":"2025-08-18","description":"Rebuilt the mobile cart as a persistent bottom drawer rather than a separate page. Added inline quantity editing and saved-for-later functionality. Mobile-only rollout.","metrics":[{"name":"Checkout Completion Rate","category":"conversion","before":53.2,"after":61.0,"unit":"%"},{"name":"Cart Abandonment Rate","category":"conversion","before":46.8,"after":39.0,"unit":"%","lower_is_better":true},{"name":"Time on Page","category":"engagement","before":1.9,"after":1.6,"unit":"min","lower_is_better":true},{"name":"Revenue per Visitor","category":"revenue","before":2.94,"after":3.41,"unit":"$"}]}];
+
+  // ─── Init ─────────────────────────────────────────────────────────────────────
+
+  async function init() {
+    try {
+      let releases;
+      try {
+        const res = await fetch('releases.json');
+        releases  = await res.json();
+      } catch (_) {
+        releases = RELEASES_DATA;
+      }
+
+      // Last updated date
+      const latest = releases.reduce((acc, r) =>
+        new Date(r.date) > new Date(acc) ? r.date : acc, releases[0].date
+      );
+      const el = document.getElementById('last-updated');
+      if (el) el.textContent = `Last updated ${fmtDate(latest)}`;
+
+      renderStats(releases);
+      renderTimeline(releases);
+      renderCards(releases);
+      observeCards();
+
+    } catch (err) {
+      console.error('Failed to load releases.json:', err);
+      document.getElementById('releases-grid').innerHTML = `
+        <div class="xl:col-span-2 flex flex-col items-center justify-center py-24 text-slate-400 gap-3">
+          <svg class="w-12 h-12 opacity-30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>
+          </svg>
+          <p class="text-base font-medium">Could not load release data</p>
+          <p class="text-sm">Make sure <code class="bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">releases.json</code> is in the same directory.</p>
+        </div>
+      `;
+    }
+  }
+
+  // ─── Card collapse/expand ──────────────────────────────────────────────────
+
+  function toggleCard(id) {
+    const metrics = document.getElementById('metrics-' + id);
+    const chevron = document.getElementById('chevron-' + id);
+    if (!metrics || !chevron) return;
+
+    const isCollapsed = metrics.classList.contains('card-collapsed');
+    if (isCollapsed) {
+      metrics.classList.remove('card-collapsed');
+      chevron.textContent = 'expand_less';
+      chevron.style.transform = '';
+    } else {
+      metrics.classList.add('card-collapsed');
+      chevron.textContent = 'expand_more';
+      chevron.style.transform = '';
+    }
+    updateToggleAllBtn();
+  }
+
+  function toggleAllCards() {
+    const allMetrics = document.querySelectorAll('[id^="metrics-"]');
+    const allCollapsed = Array.from(allMetrics).every(m => m.classList.contains('card-collapsed'));
+
+    allMetrics.forEach(m => {
+      const id = m.id.replace('metrics-', '');
+      const chevron = document.getElementById('chevron-' + id);
+      if (allCollapsed) {
+        m.classList.remove('card-collapsed');
+        if (chevron) chevron.textContent = 'expand_less';
+      } else {
+        m.classList.add('card-collapsed');
+        if (chevron) chevron.textContent = 'expand_more';
+      }
+    });
+    updateToggleAllBtn();
+  }
+
+  function updateToggleAllBtn() {
+    const allMetrics = document.querySelectorAll('[id^="metrics-"]');
+    const allCollapsed = Array.from(allMetrics).every(m => m.classList.contains('card-collapsed'));
+    const label = document.getElementById('toggle-all-label');
+    const icon = document.querySelector('#toggle-all-btn .material-symbols-outlined');
+    if (label) label.textContent = allCollapsed ? 'Expand All' : 'Collapse All';
+    if (icon) icon.textContent = allCollapsed ? 'unfold_more' : 'unfold_less';
+  }
+
+  // ─── FAB scroll listener ─────────────────────────────────────────────────────
+
+  window.addEventListener('scroll', () => {
+    const fab = document.getElementById('scroll-top-fab');
+    if (!fab) return;
+    if (window.scrollY > 300) {
+      fab.classList.add('visible');
+    } else {
+      fab.classList.remove('visible');
+    }
+  }, { passive: true });
+
+  init();
+  </script>
+</body>
+</html>
