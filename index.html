@@ -204,6 +204,37 @@
       opacity: 0;
     }
 
+    /* ── Revenue rank badges (card header) ──────────────────────────────────── */
+    .rev-rank-1 { background:#D40029; color:white; }
+    .rev-rank-2 { background:#334155; color:white; }
+    .rev-rank-3 { background:#94A3B8; color:white; }
+
+    /* ── Sort toggle ─────────────────────────────────────────────────────────── */
+    .sort-btn {
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #94A3B8;
+      border-radius: 6px;
+      transition: all .2s ease;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      white-space: nowrap;
+    }
+    .sort-btn:hover { color: #475569; }
+    .sort-btn.sort-active { background: #FEF0F0; color: #D40029; }
+
+    /* ── Leaderboard entries ─────────────────────────────────────────────────── */
+    .lb-entry {
+      transition: background-color .18s ease;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      text-align: center;
+    }
+    .lb-entry:hover { background-color: #F8FAFC; }
+
     /* ── Print ───────────────────────────────────────────────────────────────── */
     @media print {
       .no-print { display:none !important }
@@ -276,10 +307,24 @@
       </div>
     </section>
 
+    <!-- Revenue Impact Ranking -->
+    <section aria-label="Revenue impact ranking">
+      <h2 class="text-[10px] font-semibold text-ace-red uppercase tracking-[.12em] mb-4">Revenue Impact Ranking</h2>
+      <div id="revenue-leaderboard" class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden anim-fade-in d-4">
+        <!-- injected -->
+      </div>
+    </section>
+
     <!-- Release cards -->
     <section aria-label="Release impact cards">
       <div class="flex items-center justify-between mb-6">
-        <h2 class="text-[10px] font-semibold text-slate-400 uppercase tracking-[.15em]">Release Impact</h2>
+        <div class="flex items-center gap-3">
+          <h2 class="text-[10px] font-semibold text-slate-400 uppercase tracking-[.15em]">Release Impact</h2>
+          <div class="no-print flex items-center bg-slate-100 rounded-lg p-0.5">
+            <button id="sort-chrono" onclick="setSortMode('chrono')" class="sort-btn sort-active" aria-pressed="true">Chronological</button>
+            <button id="sort-revenue" onclick="setSortMode('revenue')" class="sort-btn" aria-pressed="false">Revenue Impact</button>
+          </div>
+        </div>
         <button id="toggle-all-btn" onclick="toggleAllCards()"
           class="no-print inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-800 transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-ace-red focus:ring-offset-2">
           <span class="material-symbols-outlined text-sm" aria-hidden="true">unfold_less</span>
@@ -328,6 +373,27 @@
     const good = m.lower_is_better ? raw < 0 : raw > 0;
     const flat = Math.abs(pct) < 1;
     return { raw, pct, good, flat };
+  }
+
+  function revenueScore(release) {
+    const rev = release.metrics.filter(m => m.category === 'revenue');
+    if (!rev.length) return null;
+    const scores = rev.map(m => {
+      const d = delta(m);
+      return d.good ? Math.abs(d.pct) : -Math.abs(d.pct);
+    });
+    return scores.reduce((a, b) => a + b, 0) / scores.length;
+  }
+
+  function revenueRankings(releases) {
+    return [...releases]
+      .map(r => ({ ...r, _score: revenueScore(r) }))
+      .sort((a, b) => {
+        if (a._score === null && b._score === null) return 0;
+        if (a._score === null) return 1;
+        if (b._score === null) return -1;
+        return b._score - a._score;
+      });
   }
 
   function fmtDelta(raw, unit) {
@@ -497,13 +563,60 @@
     });
   }
 
+  // ─── Leaderboard ──────────────────────────────────────────────────────────────
+
+  function renderLeaderboard(releases) {
+    const ranked = revenueRankings(releases);
+    const rankColors = { 1:'#D40029', 2:'#334155', 3:'#94A3B8' };
+
+    document.getElementById('revenue-leaderboard').innerHTML = `
+      <div class="flex divide-x divide-slate-100">
+        ${ranked.map((r, i) => {
+          const rank  = i + 1;
+          const score = r._score;
+          const scoreStr   = score === null
+            ? 'N/A'
+            : (score > 0 ? '+' : '') + score.toFixed(1) + '%';
+          const scoreColor = score === null ? '#94A3B8' : score > 0 ? '#16A34A' : '#DC2626';
+          const pillStyle  = rank <= 3
+            ? `background:${rankColors[rank]};color:white`
+            : 'background:transparent;color:#94A3B8';
+
+          return `
+            <button class="lb-entry flex-1 flex flex-col items-center gap-2 px-3 py-4 min-w-0
+                           focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ace-red"
+                    onclick="document.getElementById('card-${r.id}').scrollIntoView({behavior:'smooth',block:'center'})"
+                    aria-label="Jump to ${r.title}, revenue rank ${rank}">
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded-full flex-shrink-0"
+                    style="${pillStyle}">#${rank}</span>
+              <span class="text-[11px] font-semibold text-slate-700 leading-snug w-full px-1"
+                    style="display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden">${r.title}</span>
+              <span class="text-sm font-black leading-none" style="color:${scoreColor}">${scoreStr}</span>
+            </button>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
   // ─── Cards ────────────────────────────────────────────────────────────────────
 
-  function renderCards(releases) {
-    const sorted = [...releases].sort((a,b) => new Date(b.date) - new Date(a.date));
+  function renderCards(releases, sortMode = 'chrono') {
+    const ranked = revenueRankings(releases);
+    const revRankMap = {};
+    ranked.forEach((r, i) => { if (r._score !== null && i < 3) revRankMap[r.id] = i + 1; });
+
+    const sorted = sortMode === 'revenue'
+      ? ranked
+      : [...releases].sort((a, b) => new Date(b.date) - new Date(a.date));
 
     document.getElementById('releases-grid').innerHTML = sorted.map((r, ri) => {
       const d_classes = ['d-1','d-2','d-3','d-4','d-5','d-6','d-7','d-8'];
+      const revRank   = revRankMap[r.id];
+      const rankBadgeHtml = revRank ? `
+        <span class="text-[11px] font-bold px-2.5 py-1 rounded-full flex-shrink-0 rev-rank-${revRank}" aria-label="Revenue rank ${revRank}">
+          #${revRank} Revenue
+        </span>` : '';
 
       const metricsHtml = r.metrics.map((m, mi) => {
         const d = delta(m);
@@ -545,7 +658,10 @@
           <div class="px-6 py-5 border-b border-slate-100 cursor-pointer select-none" onclick="toggleCard('${r.id}')">
             <div class="pl-2 flex items-start justify-between">
               <div class="flex-1 min-w-0">
-                <p class="text-[10px] font-semibold text-ace-red uppercase tracking-[.12em] mb-1">${fmtDate(r.date)}</p>
+                <div class="flex items-center gap-2 mb-1">
+                  <p class="text-[10px] font-semibold text-ace-red uppercase tracking-[.12em]">${fmtDate(r.date)}</p>
+                  ${rankBadgeHtml}
+                </div>
                 <h3 class="text-xl font-bold text-slate-900">${r.title}</h3>
                 <p class="text-sm text-slate-500 mt-1.5 leading-relaxed">${r.description}</p>
               </div>
@@ -597,6 +713,20 @@
     });
   }
 
+  // ─── Sort mode ────────────────────────────────────────────────────────────────
+
+  let currentSort = 'chrono';
+
+  function setSortMode(mode) {
+    currentSort = mode;
+    document.getElementById('sort-chrono').classList.toggle('sort-active', mode === 'chrono');
+    document.getElementById('sort-revenue').classList.toggle('sort-active', mode === 'revenue');
+    document.getElementById('sort-chrono').setAttribute('aria-pressed', mode === 'chrono');
+    document.getElementById('sort-revenue').setAttribute('aria-pressed', mode === 'revenue');
+    renderCards(window._releases, mode);
+    requestAnimationFrame(() => { initTooltips(); observeCards(); });
+  }
+
   // ─── Inline data (embedded for local/preview compatibility) ──────────────────
 
   const RELEASES_DATA = [{"id":"pdp-redesign-jan-2025","title":"PDP Layout Redesign","date":"2025-01-14","description":"Redesigned the product detail page to surface key product specs and reviews above the fold, reducing scroll depth required to reach the add-to-cart button.","metrics":[{"name":"Add-to-Cart Rate","category":"conversion","before":7.8,"after":10.2,"unit":"%"},{"name":"Bounce Rate","category":"engagement","before":44.3,"after":38.1,"unit":"%","lower_is_better":true},{"name":"Time on Page","category":"engagement","before":2.1,"after":2.8,"unit":"min"},{"name":"Revenue per Visitor","category":"revenue","before":3.22,"after":4.01,"unit":"$"}]},{"id":"global-nav-update-feb-2025","title":"Global Navigation Simplification","date":"2025-02-03","description":"Reduced top-level navigation categories from 12 to 7, consolidating overlap and surfacing seasonal promotions. Focused on reducing decision fatigue at the entry point.","metrics":[{"name":"Click-Through Rate","category":"conversion","before":18.4,"after":21.9,"unit":"%"},{"name":"Bounce Rate","category":"engagement","before":39.7,"after":37.2,"unit":"%","lower_is_better":true},{"name":"Scroll Depth","category":"engagement","before":42.0,"after":44.5,"unit":"%"}]},{"id":"checkout-flow-mar-2025","title":"Checkout Flow Optimization","date":"2025-03-10","description":"Collapsed a 4-step checkout into 2 steps by combining shipping and payment on a single screen. Reduced required form fields from 14 to 9 by auto-populating known data.","metrics":[{"name":"Checkout Completion Rate","category":"conversion","before":61.4,"after":71.8,"unit":"%"},{"name":"Cart Abandonment Rate","category":"conversion","before":38.6,"after":28.2,"unit":"%","lower_is_better":true},{"name":"Average Order Value","category":"revenue","before":47.20,"after":51.60,"unit":"$"},{"name":"Revenue per Visitor","category":"revenue","before":3.89,"after":4.72,"unit":"$"}]},{"id":"search-results-apr-2025","title":"Search Results Page Redesign","date":"2025-04-22","description":"Introduced a persistent filter panel, larger product thumbnails, and inline product ratings on search results. Aimed at reducing pogo-sticking between search and PDP.","metrics":[{"name":"Add-to-Cart Rate","category":"conversion","before":5.1,"after":5.4,"unit":"%"},{"name":"Bounce Rate","category":"engagement","before":51.2,"after":49.8,"unit":"%","lower_is_better":true},{"name":"Time on Page","category":"engagement","before":1.4,"after":1.6,"unit":"min"},{"name":"Scroll Depth","category":"engagement","before":38.0,"after":41.2,"unit":"%"}]},{"id":"homepage-hero-jun-2025","title":"Homepage Hero Refresh","date":"2025-06-09","description":"Replaced static seasonal banner with a dynamic hero featuring personalized category shortcuts based on browsing history. Tested with 50% of traffic before full rollout.","metrics":[{"name":"Click-Through Rate","category":"conversion","before":9.3,"after":14.7,"unit":"%"},{"name":"Bounce Rate","category":"engagement","before":36.1,"after":33.4,"unit":"%","lower_is_better":true},{"name":"Revenue per Visitor","category":"revenue","before":4.10,"after":4.38,"unit":"$"},{"name":"Average Order Value","category":"revenue","before":49.80,"after":48.90,"unit":"$","lower_is_better":false}]},{"id":"mobile-cart-aug-2025","title":"Mobile Cart Experience","date":"2025-08-18","description":"Rebuilt the mobile cart as a persistent bottom drawer rather than a separate page. Added inline quantity editing and saved-for-later functionality. Mobile-only rollout.","metrics":[{"name":"Checkout Completion Rate","category":"conversion","before":53.2,"after":61.0,"unit":"%"},{"name":"Cart Abandonment Rate","category":"conversion","before":46.8,"after":39.0,"unit":"%","lower_is_better":true},{"name":"Time on Page","category":"engagement","before":1.9,"after":1.6,"unit":"min","lower_is_better":true},{"name":"Revenue per Visitor","category":"revenue","before":2.94,"after":3.41,"unit":"$"}]}];
@@ -620,9 +750,11 @@
       const el = document.getElementById('last-updated');
       if (el) el.textContent = `Last updated ${fmtDate(latest)}`;
 
+      window._releases = releases;
       renderStats(releases);
       renderTimeline(releases);
-      renderCards(releases);
+      renderLeaderboard(releases);
+      renderCards(releases, currentSort);
       observeCards();
 
     } catch (err) {

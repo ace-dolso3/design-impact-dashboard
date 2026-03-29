@@ -145,3 +145,51 @@ All metric fields are optional — missing metrics simply don't render.
 | Manual deploy (push to GitHub) | CI/CD pipeline | Sufficient for periodic reporting cadence, no overhead |
 | MCP as data collection layer | REST API, manual CSV export | No code required, natural language queries, already in VS Code |
 | `lower_is_better` flag on metrics | Hardcoded metric list | Flexible — handles bounce rate, load time, and future metrics |
+
+---
+
+## Feature: Revenue Impact Ranking
+
+**Status:** Design complete — ready for implementation
+
+### Summary
+Three interconnected UI components that surface which design releases drove the most revenue impact, helping stakeholders orient quickly without reading every card.
+
+### Components
+
+**1. Revenue Impact Ranking leaderboard** (new section between timeline and release cards)
+- Labeled "REVENUE IMPACT RANKING" in the standard section header treatment
+- Single white card containing a horizontal strip of all releases, ordered highest → lowest score
+- Each entry: rank number pill, release title, revenue score (green/red), vertical divider between entries
+- Releases with no revenue metrics show N/A in slate-400
+- Clicking an entry scrolls to its release card
+
+**2. Ranked badges on cards** (#1, #2, #3 only)
+- Placed top-right of the card header alongside the existing date label
+- `#1` — ace-red background, white text
+- `#2` — slate-700 background, white text
+- `#3` — slate-400 background, white text
+- Label format: `#1 Revenue`, `#2 Revenue`, `#3 Revenue`
+
+**3. Sort toggle** (in the "RELEASE IMPACT" section header)
+- Two-option button group: "Chronological" (default) | "Revenue Impact"
+- Positioned left of the existing "Collapse All" button
+- Active option uses ace-red treatment; inactive is slate-400
+- Toggling re-renders the card grid with a smooth fade transition
+
+### Revenue Impact Score Formula
+Average of signed percentage changes across all `category: "revenue"` metrics per release.
+The `lower_is_better` flag flips the sign so decreases count as positive impact.
+Releases with no revenue metrics score null and sort to the bottom.
+
+### Decision Log
+
+| Decision | Alternatives Considered | Why |
+|---|---|---|
+| Revenue-only scoring | All metrics, weighted score, best single metric | Revenue is most convincing signal for cross-functional stakeholders |
+| Average signed % change | Sum of changes, single best metric | Simple to explain, equal weighting, already respects `lower_is_better` |
+| Leaderboard between timeline and cards | Top of page, inside stats row, sidebar | Creates natural "what shipped → what mattered → full detail" narrative |
+| Compact horizontal strip | Podium treatment, data table | Matches timeline's horizontal rhythm, stays compact, reads quickly |
+| Top 3 badges only | Badge all releases, tiered labels | Clean signal without over-labeling; instantly legible |
+| Chronological as default sort | Revenue ranking as default | Preserves existing narrative; ranking is an on-demand view |
+| Sort toggle in section header | Separate filter bar, dropdown | Consistent with existing "Collapse All" control placement |
