@@ -1,217 +1,147 @@
 [
   {
-    "id": "pdp-redesign-jan-2025",
-    "title": "PDP Layout Redesign",
-    "date": "2025-01-14",
-    "description": "Redesigned the product detail page to surface key product specs and reviews above the fold, reducing scroll depth required to reach the add-to-cart button.",
+    "id": "flo-delivery-ux-oct-2025",
+    "title": "Same-Day Delivery Store Selection",
+    "date": "2025-10-27",
+    "description": "Redesigned the delivery store selection experience in the purchase side tray, surfacing contextual messaging that helps customers compare speed vs. cost trade-offs when choosing a fulfillment location. Introduced per-mile fee transparency for customer-paid radius orders and enabled a geo-targeted same-day delivery pilot at select locations.",
     "metrics": [
       {
-        "name": "Add-to-Cart Rate",
+        "name": "Same-Day Delivery Adoption",
         "category": "conversion",
-        "before": 7.8,
-        "after": 10.2,
+        "before": 8.4,
+        "after": 13.2,
         "unit": "%"
       },
       {
-        "name": "Bounce Rate",
-        "category": "engagement",
-        "before": 44.3,
-        "after": 38.1,
+        "name": "Shipping Step Drop-off",
+        "category": "conversion",
+        "before": 22.1,
+        "after": 17.8,
         "unit": "%",
         "lower_is_better": true
       },
       {
-        "name": "Time on Page",
+        "name": "Store Selection Engagement",
+        "category": "engagement",
+        "before": 31.0,
+        "after": 44.6,
+        "unit": "%"
+      },
+      {
+        "name": "Revenue per Visitor",
+        "category": "revenue",
+        "before": 3.41,
+        "after": 3.89,
+        "unit": "$"
+      }
+    ]
+  },
+  {
+    "id": "bundles-kits-jan-2026",
+    "title": "Bundles & Kits: Kit Shopping Experience",
+    "date": "2026-01-13",
+    "description": "Introduced a new product type on ace.com enabling customers to browse and purchase pre-built hardware kits and product bundles. Delivered new kit-specific category pages on Acenet, updated search and category page integrations to surface kits in top-of-funnel discovery, and built product family data structures to support accurate pricing and availability.",
+    "metrics": [
+      {
+        "name": "Bundle Add-to-Cart Rate",
+        "category": "conversion",
+        "before": 4.2,
+        "after": 6.7,
+        "unit": "%"
+      },
+      {
+        "name": "Search-to-PDP Conversion",
+        "category": "conversion",
+        "before": 12.3,
+        "after": 15.1,
+        "unit": "%"
+      },
+      {
+        "name": "Time on Product Page",
         "category": "engagement",
         "before": 2.1,
         "after": 2.8,
         "unit": "min"
       },
       {
-        "name": "Revenue per Visitor",
+        "name": "Average Order Value",
         "category": "revenue",
-        "before": 3.22,
-        "after": 4.01,
+        "before": 47.20,
+        "after": 58.40,
         "unit": "$"
       }
     ]
   },
   {
-    "id": "global-nav-update-feb-2025",
-    "title": "Global Navigation Simplification",
-    "date": "2025-02-03",
-    "description": "Reduced top-level navigation categories from 12 to 7, consolidating overlap and surfacing seasonal promotions. Focused on reducing decision fatigue at the entry point.",
-    "metrics": [
-      {
-        "name": "Click-Through Rate",
-        "category": "conversion",
-        "before": 18.4,
-        "after": 21.9,
-        "unit": "%"
-      },
-      {
-        "name": "Bounce Rate",
-        "category": "engagement",
-        "before": 39.7,
-        "after": 37.2,
-        "unit": "%",
-        "lower_is_better": true
-      },
-      {
-        "name": "Scroll Depth",
-        "category": "engagement",
-        "before": 42.0,
-        "after": 44.5,
-        "unit": "%"
-      }
-    ]
-  },
-  {
-    "id": "checkout-flow-mar-2025",
-    "title": "Checkout Flow Optimization",
-    "date": "2025-03-10",
-    "description": "Collapsed a 4-step checkout into 2 steps by combining shipping and payment on a single screen. Reduced required form fields from 14 to 9 by auto-populating known data.",
+    "id": "bnpl-phase1-feb-2026",
+    "title": "Buy Now Pay Later & Digital Wallets",
+    "date": "2026-02-12",
+    "description": "Launched Buy Now Pay Later and digital wallet payment options at checkout, giving customers flexible financing for larger purchases. Introduced new payment method selection UI, inline installment plan previews, and streamlined digital wallet authentication — reducing friction on the payment step for high-AOV orders.",
     "metrics": [
       {
         "name": "Checkout Completion Rate",
         "category": "conversion",
-        "before": 61.4,
-        "after": 71.8,
+        "before": 62.4,
+        "after": 68.9,
         "unit": "%"
       },
       {
-        "name": "Cart Abandonment Rate",
+        "name": "Payment Step Drop-off",
         "category": "conversion",
-        "before": 38.6,
-        "after": 28.2,
+        "before": 31.2,
+        "after": 24.7,
         "unit": "%",
         "lower_is_better": true
       },
       {
         "name": "Average Order Value",
         "category": "revenue",
-        "before": 47.20,
-        "after": 51.60,
+        "before": 51.60,
+        "after": 63.20,
         "unit": "$"
       },
       {
         "name": "Revenue per Visitor",
         "category": "revenue",
         "before": 3.89,
-        "after": 4.72,
+        "after": 4.43,
         "unit": "$"
       }
     ]
   },
   {
-    "id": "search-results-apr-2025",
-    "title": "Search Results Page Redesign",
-    "date": "2025-04-22",
-    "description": "Introduced a persistent filter panel, larger product thumbnails, and inline product ratings on search results. Aimed at reducing pogo-sticking between search and PDP.",
+    "id": "fraud-riskified-mar-2026",
+    "title": "Fraud Detection Migration: Riskified",
+    "date": "2026-03-05",
+    "description": "Completed migration from the legacy fraud detection platform to Riskified, including full PayPal API modernization from SOAP to REST. Streamlined the checkout approval flow to reduce false declines, automated chargeback handling, and resolved edge cases affecting Canadian billing addresses and split BOGA orders — improving order success rates across payment types.",
     "metrics": [
       {
-        "name": "Add-to-Cart Rate",
+        "name": "Order Approval Rate",
         "category": "conversion",
-        "before": 5.1,
-        "after": 5.4,
+        "before": 91.2,
+        "after": 94.8,
         "unit": "%"
       },
       {
-        "name": "Bounce Rate",
-        "category": "engagement",
-        "before": 51.2,
-        "after": 49.8,
+        "name": "False Decline Rate",
+        "category": "conversion",
+        "before": 2.1,
+        "after": 0.9,
         "unit": "%",
         "lower_is_better": true
       },
       {
-        "name": "Time on Page",
-        "category": "engagement",
-        "before": 1.4,
-        "after": 1.6,
-        "unit": "min"
-      },
-      {
-        "name": "Scroll Depth",
-        "category": "engagement",
-        "before": 38.0,
-        "after": 41.2,
-        "unit": "%"
-      }
-    ]
-  },
-  {
-    "id": "homepage-hero-jun-2025",
-    "title": "Homepage Hero Refresh",
-    "date": "2025-06-09",
-    "description": "Replaced static seasonal banner with a dynamic hero featuring personalized category shortcuts based on browsing history. Tested with 50% of traffic before full rollout.",
-    "metrics": [
-      {
-        "name": "Click-Through Rate",
+        "name": "PayPal Checkout Completion",
         "category": "conversion",
-        "before": 9.3,
-        "after": 14.7,
+        "before": 71.3,
+        "after": 76.8,
         "unit": "%"
       },
       {
-        "name": "Bounce Rate",
-        "category": "engagement",
-        "before": 36.1,
-        "after": 33.4,
-        "unit": "%",
-        "lower_is_better": true
-      },
-      {
-        "name": "Revenue per Visitor",
+        "name": "Revenue per Session",
         "category": "revenue",
-        "before": 4.10,
-        "after": 4.38,
-        "unit": "$"
-      },
-      {
-        "name": "Average Order Value",
-        "category": "revenue",
-        "before": 49.80,
-        "after": 48.90,
-        "unit": "$",
-        "lower_is_better": false
-      }
-    ]
-  },
-  {
-    "id": "mobile-cart-aug-2025",
-    "title": "Mobile Cart Experience",
-    "date": "2025-08-18",
-    "description": "Rebuilt the mobile cart as a persistent bottom drawer rather than a separate page. Added inline quantity editing and saved-for-later functionality. Mobile-only rollout.",
-    "metrics": [
-      {
-        "name": "Checkout Completion Rate",
-        "category": "conversion",
-        "before": 53.2,
-        "after": 61.0,
-        "unit": "%"
-      },
-      {
-        "name": "Cart Abandonment Rate",
-        "category": "conversion",
-        "before": 46.8,
-        "after": 39.0,
-        "unit": "%",
-        "lower_is_better": true
-      },
-      {
-        "name": "Time on Page",
-        "category": "engagement",
-        "before": 1.9,
-        "after": 1.6,
-        "unit": "min",
-        "lower_is_better": true
-      },
-      {
-        "name": "Revenue per Visitor",
-        "category": "revenue",
-        "before": 2.94,
-        "after": 3.41,
+        "before": 4.12,
+        "after": 4.51,
         "unit": "$"
       }
     ]
