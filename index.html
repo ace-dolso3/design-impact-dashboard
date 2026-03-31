@@ -1021,11 +1021,8 @@
       }
 
       // Last updated date
-      const latest = releases.reduce((acc, r) =>
-        new Date(r.date) > new Date(acc) ? r.date : acc, releases[0].date
-      );
       const el = document.getElementById('last-updated');
-      if (el) el.textContent = `Last updated ${fmtDate(latest)}`;
+      if (el) el.textContent = `Last updated ${new Date().toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' })}`;
 
       window._releases = releases;
       renderStats(releases);
