@@ -380,7 +380,7 @@
         <p id="last-updated" class="text-xs text-slate-400 hidden sm:block"></p>
         <button
           onclick="window.print()"
-          class="no-print hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-ace-red hover:bg-ace-red-dk text-white text-sm font-semibold transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-ace-red focus:ring-offset-2"
+          class="no-print hidden items-center gap-2 px-4 py-2 rounded-lg bg-ace-red hover:bg-ace-red-dk text-white text-sm font-semibold transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-ace-red focus:ring-offset-2"
           aria-label="Export to PDF"
         >
           <span class="material-symbols-outlined text-lg" aria-hidden="true">print</span>
@@ -594,7 +594,7 @@
     const avgChange    = (totalAbsPct / metricCount).toFixed(1);
 
     const stats = [
-      { label:'Design Releases',   value: releases.length, suffix:'',  icon: icons.releases, delay:'d-1' },
+      { label:'Tracked Releases',   value: releases.length, suffix:'',  icon: icons.releases, delay:'d-1' },
       { label:'Metrics Tracked',   value: metricCount,     suffix:'',  icon: icons.metrics,  delay:'d-2' },
       { label:'Metrics Improved',  value: successRate,     suffix:'%', icon: icons.success,  delay:'d-3' },
       { label:'Avg. Metric Change',value: avgChange,       suffix:'%', icon: icons.avg,      delay:'d-4' },
