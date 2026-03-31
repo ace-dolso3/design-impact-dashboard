@@ -96,12 +96,6 @@
       overflow: hidden;
       max-height: 2.85em;
       line-height: 1.425;
-      transition: max-height .35s cubic-bezier(.22,.68,0,1.2);
-    }
-    .tl-entry.tl-expandable:hover .tl-label {
-      -webkit-line-clamp: unset;
-      overflow: visible;
-      max-height: 10em;
     }
 
     /* ── Stat cards ──────────────────────────────────────────────────────────── */
@@ -637,6 +631,7 @@
       <div class="tl-entry flex flex-col items-center cursor-pointer"
            style="flex:0 0 auto;width:130px;${isLatest(i) ? '' : 'padding-top:3px'}"
            data-card-id="${escHtml(r.id)}"
+           title="${escHtml(r.title)}"
            onclick="document.getElementById('card-'+this.dataset.cardId)?.scrollIntoView({behavior:'smooth',block:'center'})">
         <button
           class="tl-dot ${isLatest(i) ? 'w-3 h-3' : 'tl-dot-sm'} rounded-full bg-ace-red relative z-10 flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-ace-red"
@@ -659,14 +654,6 @@
     `;
 
     requestAnimationFrame(() => {
-      // Mark entries whose labels are actually clamped (more than 2 lines of text)
-      container.querySelectorAll('.tl-entry').forEach(entry => {
-        const label = entry.querySelector('.tl-label');
-        if (label && label.scrollHeight > label.clientHeight + 1) {
-          entry.classList.add('tl-expandable');
-        }
-      });
-
       // Trim connector line to span only first dot → last dot
       const dots = container.querySelectorAll('.tl-dot');
       const line = document.getElementById('tl-connector');
