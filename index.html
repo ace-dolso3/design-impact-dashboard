@@ -237,6 +237,18 @@
       #releases-grid { grid-template-columns: 1fr 1fr }
     }
 
+    /* ── Auth gate ───────────────────────────────────────────────────────────── */
+    @keyframes gateShake {
+      0%,100% { transform:translateX(0)   }
+      20%     { transform:translateX(-8px) }
+      40%     { transform:translateX(8px)  }
+      60%     { transform:translateX(-5px) }
+      80%     { transform:translateX(5px)  }
+    }
+    .gate-shake { animation: gateShake .4s ease; }
+    #auth-gate  { transition: opacity .35s ease; }
+    #auth-gate.gate-out { opacity:0; pointer-events:none; }
+
     /* ── Reduced motion ──────────────────────────────────────────────────────── */
     @media (prefers-reduced-motion:reduce) {
       *, *::before, *::after {
@@ -249,6 +261,89 @@
   </style>
 </head>
 <body class="min-h-screen text-slate-900">
+
+  <!-- ── Auth Gate ─────────────────────────────────────────────────────────── -->
+  <div id="auth-gate"
+       role="dialog" aria-modal="true" aria-labelledby="gate-title"
+       style="display:none;position:fixed;inset:0;z-index:9999;background:#F8FAFC;align-items:center;justify-content:center;">
+    <div class="w-full max-w-xs mx-4">
+
+      <!-- Card -->
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm px-8 py-10">
+
+        <!-- Logo -->
+        <div class="flex justify-center mb-7">
+          <svg width="83" height="37" viewBox="0 0 166 74" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Ace Hardware" role="img">
+            <g clip-path="url(#gate-logo-clip)">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M61.3605 72.6027H37.9586L29.729 27.6525L48.0383 3.0094e-06L61.3605 72.6027ZM58.2137 40.9101C58.2091 41.2246 58.1808 41.588 58.148 42.0097C58.0221 43.6291 57.8292 46.1087 58.6531 49.9857C58.6531 49.9857 61.8143 73.5353 85.6286 74C92.4805 73.5277 95.3702 72.215 98.8951 70.4769C112.125 63.9591 114.328 49.3516 114.328 49.3516H101.881C94.6797 65.7144 80.6906 60.2245 80.6906 60.2245L88.5601 22.9917C103.682 23.4074 104.247 37.7509 104.247 37.7509H116.9C116.9 37.7509 117.789 22.6833 103.201 13.7442C100.213 11.9132 95.2866 10.6254 90.4639 10.5119C90.4639 10.5119 63.528 8.81061 58.2137 40.9101ZM166 14.5529L163.531 26.1539H142.34L139.871 37.7532H161.113L158.697 49.3534H137.453L135.036 60.953H156.279L153.81 72.5001H111.017L123.206 14.5529H166ZM24.4824 35.6279L31.3745 72.6027H0L24.4824 35.6279ZM159.851 68.8275C159.851 69.3594 159.46 69.3905 159.02 69.3905H158.398V68.3226H159.105C159.466 68.3226 159.851 68.4022 159.851 68.8275ZM157.88 71.3266H158.398V69.8328H158.997L159.898 71.3266H160.478L159.506 69.8088C160.007 69.7462 160.393 69.4772 160.393 68.8621C160.393 68.1811 159.993 67.881 159.183 67.881H157.88V71.3266ZM161.429 69.5958C161.429 71.034 160.368 72.0932 159.027 72.0932C157.669 72.0932 156.609 71.034 156.609 69.5958C156.609 68.1811 157.669 67.1144 159.027 67.1144C160.368 67.1144 161.429 68.1811 161.429 69.5958ZM159.027 66.6163C157.394 66.6163 156.012 67.881 156.012 69.5958C156.012 71.3266 157.394 72.5912 159.027 72.5912C160.644 72.5912 162.025 71.3266 162.025 69.5958C162.025 67.881 160.644 66.6163 159.027 66.6163Z" fill="#D40029"/>
+            </g>
+            <defs><clipPath id="gate-logo-clip"><rect width="166" height="74" fill="white"/></clipPath></defs>
+          </svg>
+        </div>
+
+        <!-- Heading -->
+        <div class="text-center mb-7">
+          <h1 id="gate-title" class="text-xl font-bold text-slate-900 mb-1">Design Impact</h1>
+          <p class="text-sm text-slate-500 leading-relaxed">Enter your password to continue</p>
+        </div>
+
+        <!-- Form -->
+        <form id="auth-form" novalidate class="space-y-3">
+          <div>
+            <label for="gate-password" class="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+            <div class="relative">
+              <input
+                id="gate-password"
+                type="password"
+                autocomplete="current-password"
+                placeholder="••••••••"
+                aria-required="true"
+                aria-describedby="gate-error"
+                class="w-full px-4 py-3 pr-12 rounded-xl border border-slate-200 text-sm text-slate-900 placeholder:text-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-ace-red focus:border-transparent transition-colors"
+              />
+              <button
+                type="button"
+                id="gate-toggle"
+                aria-label="Show password"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer focus:outline-none focus:ring-1 focus:ring-ace-red rounded"
+              >
+                <span class="material-symbols-outlined select-none" style="font-size:20px" id="gate-toggle-icon">visibility</span>
+              </button>
+            </div>
+          </div>
+
+          <p id="gate-error" role="alert" aria-live="assertive" class="text-xs text-red-600 font-medium" style="display:none;margin-top:4px"></p>
+
+          <button
+            type="submit"
+            class="w-full py-3 rounded-xl bg-ace-red hover:bg-ace-red-dk text-white text-sm font-semibold transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-ace-red focus:ring-offset-2"
+            style="margin-top:8px"
+          >
+            Enter Dashboard
+          </button>
+        </form>
+
+      </div><!-- /card -->
+
+      <p class="text-center text-[11px] text-slate-400 mt-4 tracking-wide">Ace Hardware · Ecom Design</p>
+
+    </div>
+  </div>
+
+  <!-- Synchronous auth check — runs before paint to avoid flash -->
+  <script>
+    (function () {
+      try {
+        var s = localStorage.getItem('did_auth');
+        if (!s || JSON.parse(s).expires <= Date.now()) {
+          var g = document.getElementById('auth-gate');
+          g.style.display = 'flex';
+        }
+      } catch (e) {
+        document.getElementById('auth-gate').style.display = 'flex';
+      }
+    })();
+  </script>
 
   <!-- ── Header ──────────────────────────────────────────────────────────────── -->
   <header class="bg-white/90 backdrop-blur border-b border-slate-100 sm:sticky top-0 z-50 no-print">
@@ -996,6 +1091,61 @@
   }, { passive: true });
 
   init();
+  </script>
+
+  <!-- ── Auth gate interactions ─────────────────────────────────────────────── -->
+  <script>
+    (function () {
+      var PASS = 'dolso3';
+      var KEY  = 'did_auth';
+      var TTL  = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+      var gate = document.getElementById('auth-gate');
+      if (!gate || gate.style.display === 'none') return; // already authenticated
+
+      var form   = document.getElementById('auth-form');
+      var input  = document.getElementById('gate-password');
+      var toggle = document.getElementById('gate-toggle');
+      var icon   = document.getElementById('gate-toggle-icon');
+      var error  = document.getElementById('gate-error');
+
+      // Auto-focus password field
+      setTimeout(function () { input.focus(); }, 60);
+
+      // Show / hide password toggle
+      toggle.addEventListener('click', function () {
+        var show = input.type === 'password';
+        input.type = show ? 'text' : 'password';
+        icon.textContent = show ? 'visibility_off' : 'visibility';
+        toggle.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+      });
+
+      // Clear error state while typing
+      input.addEventListener('input', function () {
+        error.style.display = 'none';
+        input.style.borderColor = '';
+      });
+
+      // Submit
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (input.value === PASS) {
+          try { localStorage.setItem(KEY, JSON.stringify({ expires: Date.now() + TTL })); } catch (_) {}
+          gate.classList.add('gate-out');
+          setTimeout(function () { if (gate.parentNode) gate.remove(); }, 400);
+        } else {
+          error.textContent = 'Incorrect password. Please try again.';
+          error.style.display = 'block';
+          input.style.borderColor = '#FCA5A5';
+          input.classList.add('gate-shake');
+          input.addEventListener('animationend', function () {
+            input.classList.remove('gate-shake');
+          }, { once: true });
+          input.value = '';
+          setTimeout(function () { input.focus(); }, 0);
+        }
+      });
+    })();
   </script>
 </body>
 </html>
