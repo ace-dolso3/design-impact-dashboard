@@ -392,10 +392,10 @@
         <button id="tab-ranking" onclick="switchTab('ranking')" class="tab-btn">Revenue Impact Ranking</button>
       </div>
       <div class="bg-white sm:rounded-2xl border border-slate-100 shadow-sm anim-fade-in d-3 -mx-4 sm:mx-0">
-        <div id="tab-content-timeline" class="overflow-x-auto px-6 py-5 flex items-center">
-          <div id="timeline" class="w-full" style="min-width:560px"><!-- injected --></div>
+        <div id="tab-content-timeline" class="tl-scroll overflow-x-auto px-6 py-5 flex items-center">
+          <div id="timeline"><!-- injected --></div>
         </div>
-        <div id="tab-content-ranking" class="hidden overflow-x-auto px-6 py-5">
+        <div id="tab-content-ranking" class="tl-scroll hidden overflow-x-auto px-6 py-5">
           <div id="revenue-leaderboard"><!-- injected --></div>
         </div>
       </div>
@@ -496,9 +496,12 @@
   }
 
   function revenueScore(release) {
-    const rev = release.metrics.filter(m => m.category === 'revenue');
-    if (!rev.length) return null;
-    const scores = rev.map(m => {
+    // Prefer explicit revenue metrics; fall back to conversion as a revenue proxy
+    const pool = release.metrics.filter(m => m.category === 'revenue').length
+      ? release.metrics.filter(m => m.category === 'revenue')
+      : release.metrics.filter(m => m.category === 'conversion');
+    if (!pool.length) return null;
+    const scores = pool.map(m => {
       const d = delta(m);
       return d.good ? Math.abs(d.pct) : -Math.abs(d.pct);
     });
@@ -604,7 +607,7 @@
 
     const items = sorted.map((r, i) => `
       <div class="tl-entry flex flex-col items-center cursor-pointer"
-           style="flex:1;min-width:100px;max-width:140px;${isLatest(i) ? '' : 'padding-top:3px'}"
+           style="flex:0 0 auto;width:130px;${isLatest(i) ? '' : 'padding-top:3px'}"
            data-card-id="${escHtml(r.id)}"
            onclick="document.getElementById('card-'+this.dataset.cardId)?.scrollIntoView({behavior:'smooth',block:'center'})">
         <button
@@ -621,7 +624,7 @@
     `).join('');
 
     container.innerHTML = `
-      <div class="relative flex items-start justify-between w-full gap-2">
+      <div class="relative flex items-start gap-10">
         <div id="tl-connector" class="absolute h-px bg-slate-200" style="top:6px;left:0;right:0"></div>
         ${items}
       </div>
@@ -705,7 +708,7 @@
     const rankColors = { 1:'#D40029', 2:'#334155', 3:'#94A3B8' };
 
     document.getElementById('revenue-leaderboard').innerHTML = `
-      <div class="flex divide-x divide-slate-100">
+      <div class="flex divide-x divide-slate-100" style="width:max-content">
         ${ranked.map((r, i) => {
           const rank  = i + 1;
           const score = r._score;
@@ -718,7 +721,7 @@
             : 'background:transparent;color:#94A3B8';
 
           return `
-            <button class="lb-entry flex-1 flex flex-col items-center gap-2 px-3 py-4" style="min-width:110px"
+            <button class="lb-entry flex-shrink-0 flex flex-col items-center gap-2 px-5 py-4" style="width:160px"
                            focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ace-red"
                     data-card-id="${escHtml(r.id)}"
                     onclick="document.getElementById('card-'+this.dataset.cardId)?.scrollIntoView({behavior:'smooth',block:'center'})"
