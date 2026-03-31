@@ -828,19 +828,15 @@
           <!-- Full-height left border -->
           <div class="absolute left-0 top-0 bottom-0 w-1 bg-ace-red rounded-l-2xl"></div>
           <!-- Card header -->
-          <div class="px-6 py-5 border-b border-slate-100 cursor-pointer select-none" onclick="toggleCard(this.closest('article').dataset.cardId)">
-            <div class="pl-2 flex items-start justify-between">
+          <div class="p-5 border-b border-slate-100 cursor-pointer select-none" onclick="toggleCard(this.closest('article').dataset.cardId)">
+            <div class="flex items-start justify-between">
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2 mb-1">
                   <p class="text-[10px] font-semibold text-ace-red uppercase tracking-[.12em]">Released ${fmtDate(r.date)}</p>
                   <span class="sm:hidden">${rankBadgeHtml}</span>
                 </div>
-                <p class="text-[10px] font-medium tracking-wide text-slate-400 -mt-0.5 mb-1">${fmtWindow(r.date)}</p>
                 <div class="flex items-center gap-2">
                   <h3 class="text-lg font-bold text-slate-900">${escHtml(r.title)}</h3>
-                  <a href="#" onclick="event.stopPropagation()" class="flex-shrink-0 inline-flex items-center text-slate-500 hover:text-ace-red transition-colors duration-200" aria-label="Open in Azure DevOps" title="Open in Azure DevOps">
-                    <span class="material-symbols-outlined text-base leading-none" aria-hidden="true">open_in_new</span>
-                  </a>
                   <span class="hidden sm:contents">${rankBadgeHtml}</span>
                 </div>
                 <p class="text-sm text-slate-500 mt-1.5 leading-relaxed">${escHtml(r.description)}</p>
@@ -852,6 +848,7 @@
           </div>
           <!-- Metrics (collapsible) -->
           <div id="metrics-${escHtml(r.id)}" class="p-5 space-y-3 transition-all duration-300 ease-in-out" style="max-height:2000px;overflow:hidden">
+            <p class="text-[10px] font-medium tracking-wide text-slate-500 pb-1">ANALYSIS RANGE: ${fmtWindow(r.date)}</p>
             ${metricsHtml}
           </div>
         </article>
