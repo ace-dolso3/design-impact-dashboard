@@ -27,6 +27,13 @@
         "before": 2.21,
         "after": 2.80,
         "unit": "%"
+      },
+      {
+        "name": "Transaction Rate",
+        "category": "revenue",
+        "before": 0.57,
+        "after": 0.68,
+        "unit": "%"
       }
     ]
   },
@@ -49,6 +56,13 @@
         "category": "conversion",
         "before": 23.47,
         "after": 23.92,
+        "unit": "%"
+      },
+      {
+        "name": "Transaction Rate",
+        "category": "revenue",
+        "before": 0.66,
+        "after": 0.64,
         "unit": "%"
       }
     ]
@@ -81,6 +95,13 @@
         "before": 63.82,
         "after": 64.68,
         "unit": "%"
+      },
+      {
+        "name": "Transaction Rate",
+        "category": "revenue",
+        "before": 0.60,
+        "after": 0.57,
+        "unit": "%"
       }
     ]
   },
@@ -105,6 +126,13 @@
         "after": 14.47,
         "unit": "%",
         "lower_is_better": true
+      },
+      {
+        "name": "Transaction Rate",
+        "category": "revenue",
+        "before": 0.56,
+        "after": 0.52,
+        "unit": "%"
       }
     ]
   },
@@ -127,6 +155,13 @@
         "category": "conversion",
         "before": 62.26,
         "after": 64.13,
+        "unit": "%"
+      },
+      {
+        "name": "Transaction Rate",
+        "category": "revenue",
+        "before": 0.57,
+        "after": 0.50,
         "unit": "%"
       }
     ]
@@ -152,6 +187,13 @@
         "after": 13.40,
         "unit": "%",
         "lower_is_better": true
+      },
+      {
+        "name": "Transaction Rate",
+        "category": "revenue",
+        "before": 0.50,
+        "after": 0.54,
+        "unit": "%"
       }
     ]
   },
@@ -183,30 +225,13 @@
         "before": 0.51,
         "after": 0.60,
         "unit": "%"
-      }
-    ]
-  },
-  {
-    "id": "yardrx-phase1-ui-feb-2026",
-    "title": "YardRx Phase 1: Subscription Service UI Enhancements",
-    "date": "2026-02-12",
-    "description": "Launched Phase 1 of a comprehensive YardRx subscription service UI update — introducing cart-integrated delivery management with a widget for adding items to upcoming deliveries, a 20% subscriber discount display in Cart, redesigned results and plan modification pages, an app vs. web order source indicator for fulfillment teams, and application instructions on pick sheets.",
-    "metrics": [
-      {
-        "name": "Cart Bounce Rate",
-        "category": "engagement",
-        "before": 56.50,
-        "after": 56.01,
-        "unit": "%",
-        "lower_is_better": true
       },
       {
-        "name": "Cart Exit Rate",
-        "category": "engagement",
-        "before": 14.26,
-        "after": 14.12,
-        "unit": "%",
-        "lower_is_better": true
+        "name": "Transaction Rate",
+        "category": "revenue",
+        "before": 0.44,
+        "after": 0.48,
+        "unit": "%"
       }
     ]
   },
@@ -238,6 +263,13 @@
         "before": 0.93,
         "after": 1.02,
         "unit": "%"
+      },
+      {
+        "name": "Transaction Rate",
+        "category": "revenue",
+        "before": 0.44,
+        "after": 0.46,
+        "unit": "%"
       }
     ]
   },
@@ -268,6 +300,13 @@
         "category": "conversion",
         "before": 59.16,
         "after": 60.22,
+        "unit": "%"
+      },
+      {
+        "name": "Transaction Rate",
+        "category": "revenue",
+        "before": 0.46,
+        "after": 0.42,
         "unit": "%"
       }
     ]
