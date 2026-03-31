@@ -839,7 +839,7 @@
             <div class="flex items-start justify-between">
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2 mb-1">
-                  <p class="text-[10px] font-semibold text-ace-red uppercase tracking-[.12em]">Released ${fmtDate(r.date)}</p>
+                  <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-[.12em]">Released ${fmtDate(r.date)}</p>
                   <span class="sm:hidden">${rankBadgeHtml}</span>
                 </div>
                 <div class="flex items-center gap-2">
@@ -855,7 +855,7 @@
           </div>
           <!-- Metrics (collapsible) -->
           <div id="metrics-${escHtml(r.id)}" class="p-5 space-y-3 transition-all duration-300 ease-in-out" style="max-height:2000px;overflow:hidden">
-            <p class="text-[10px] font-medium tracking-wide text-slate-500 pb-1">ANALYSIS RANGE: ${fmtWindow(r.date)}</p>
+            <p class="text-[10px] font-medium tracking-wide text-slate-800 pb-1">ANALYSIS RANGE: ${fmtWindow(r.date)}</p>
             ${metricsHtml}
           </div>
         </article>
