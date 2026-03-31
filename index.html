@@ -491,7 +491,7 @@
     const b0 = new Date(rel); b0.setDate(b0.getDate() - 7);
     const b1 = new Date(rel); b1.setDate(b1.getDate() - 1);
     const a1 = new Date(rel); a1.setDate(a1.getDate() + 6);
-    const fmt = dt => dt.toLocaleDateString('en-US', { month:'short', day:'numeric' });
+    const fmt = dt => `${dt.getMonth()+1}/${dt.getDate()}`;
     return `${fmt(b0)}–${fmt(b1)} vs ${fmt(rel)}–${fmt(a1)}`;
   }
 
@@ -818,7 +818,7 @@
                   <p class="text-[10px] font-semibold text-ace-red uppercase tracking-[.12em]">Released ${fmtDate(r.date)}</p>
                   <span class="sm:hidden">${rankBadgeHtml}</span>
                 </div>
-                <p class="text-[9px] font-medium tracking-wide text-slate-400 -mt-0.5 mb-1">${fmtWindow(r.date)}</p>
+                <p class="text-[10px] font-medium tracking-wide text-slate-400 -mt-0.5 mb-1">${fmtWindow(r.date)}</p>
                 <div class="flex items-center gap-2">
                   <h3 class="text-lg font-bold text-slate-900">${escHtml(r.title)}</h3>
                   <a href="#" onclick="event.stopPropagation()" class="flex-shrink-0 inline-flex items-center text-slate-500 hover:text-ace-red transition-colors duration-200" aria-label="Open in Azure DevOps" title="Open in Azure DevOps">
