@@ -231,10 +231,30 @@
     /* ── Print ───────────────────────────────────────────────────────────────── */
     @media print {
       .no-print { display:none !important }
-      .release-card { break-inside:avoid; page-break-inside:avoid }
       header { position:static }
       body { background:white !important }
-      #releases-grid { grid-template-columns: 1fr 1fr }
+
+      /* Force all metric sections fully open */
+      [id^="metrics-"] {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+
+      /* Hide tabs, timeline, ranking, and summary stats — cards only */
+      .tab-btn,
+      #tab-content-timeline,
+      #tab-content-ranking,
+      #summary-stats { display:none !important }
+
+      /* Single-column block layout avoids grid reflow gaps */
+      #releases-grid {
+        display: block !important;
+      }
+      .release-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        margin-bottom: 16px;
+      }
     }
 
     /* ── Auth gate ───────────────────────────────────────────────────────────── */
