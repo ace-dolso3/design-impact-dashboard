@@ -118,9 +118,31 @@
     .pill-revenue    { background:#FFFBEB; color:#B45309 }
 
     /* ── Scrollbar (timeline) ────────────────────────────────────────────────── */
-    .tl-scroll::-webkit-scrollbar        { height:3px }
-    .tl-scroll::-webkit-scrollbar-track  { background:#F1F5F9; border-radius:2px }
-    .tl-scroll::-webkit-scrollbar-thumb  { background:#E82D34; border-radius:2px }
+    .tl-scroll                     { scrollbar-width: none; }
+    .tl-scroll::-webkit-scrollbar  { display: none; }
+    .tl-custom-track {
+      position: absolute;
+      bottom: 5px;
+      left: 20px;
+      right: 20px;
+      height: 3px;
+      background: #F1F5F9;
+      border-radius: 2px;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      pointer-events: none;
+    }
+    .tl-custom-thumb {
+      position: absolute;
+      top: 0;
+      height: 3px;
+      background: #CBD5E1;
+      border-radius: 2px;
+    }
+    .tl-custom-track.is-visible {
+      opacity: 1;
+      transition: opacity 0.12s ease;
+    }
 
     /* ── Progress bar ────────────────────────────────────────────────────────── */
     .prog-fill {
@@ -405,13 +427,14 @@
         <button id="tab-timeline" onclick="switchTab('timeline')" class="tab-btn tab-active">Release Timeline</button>
         <button id="tab-ranking" onclick="switchTab('ranking')" class="tab-btn">Revenue Impact Ranking</button>
       </div>
-      <div class="bg-white sm:rounded-2xl border border-slate-100 shadow-sm anim-fade-in d-3 -mx-4 sm:mx-0">
-        <div id="tab-content-timeline" class="tl-scroll overflow-x-auto px-6 py-5 flex items-center">
+      <div class="bg-white sm:rounded-2xl border border-slate-100 shadow-sm anim-fade-in d-3 -mx-4 sm:mx-0 pb-3 relative">
+        <div id="tab-content-timeline" class="tl-scroll overflow-x-auto px-6 pt-5 pb-4 flex items-center">
           <div id="timeline"><!-- injected --></div>
         </div>
-        <div id="tab-content-ranking" class="tl-scroll hidden overflow-x-auto px-6 py-5">
+        <div id="tab-content-ranking" class="tl-scroll hidden overflow-x-auto px-6 pt-5 pb-4">
           <div id="revenue-leaderboard"><!-- injected --></div>
         </div>
+        <div class="tl-custom-track" id="scrolltrack-tab"><div class="tl-custom-thumb" id="scrollthumb-tab"></div></div>
       </div>
     </section>
 
@@ -1137,6 +1160,34 @@
     if (label) label.textContent = allCollapsed ? 'Expand All' : 'Collapse All';
     if (icon) icon.textContent = allCollapsed ? 'unfold_more' : 'unfold_less';
   }
+
+  // ─── Scrollbar fade-on-scroll ────────────────────────────────────────────────
+  (function () {
+    const track = document.getElementById('scrolltrack-tab');
+    const thumb = document.getElementById('scrollthumb-tab');
+    if (!track || !thumb) return;
+    let hideTimer = null;
+
+    function updateThumb(el) {
+      const trackW = track.offsetWidth;
+      const ratio  = el.scrollWidth > el.clientWidth ? el.clientWidth / el.scrollWidth : 1;
+      const thumbW = Math.max(trackW * ratio, 28);
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      const thumbLeft = maxScroll > 0 ? (el.scrollLeft / maxScroll) * (trackW - thumbW) : 0;
+      thumb.style.width = thumbW + 'px';
+      thumb.style.left  = thumbLeft + 'px';
+    }
+
+    document.querySelectorAll('.tl-scroll').forEach(el => {
+      el.addEventListener('scroll', () => {
+        if (el.classList.contains('hidden')) return;
+        updateThumb(el);
+        track.classList.add('is-visible');
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => track.classList.remove('is-visible'), 1200);
+      }, { passive: true });
+    });
+  })();
 
   // ─── FAB scroll listener ─────────────────────────────────────────────────────
 
