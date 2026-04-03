@@ -1,0 +1,106 @@
+[
+  {
+    "id": "plp-week-2026-04-01",
+    "page": "plp",
+    "pageLabel": "Product List Page",
+    "period": {
+      "startDate": "2026-03-30",
+      "endDate": "2026-04-05"
+    },
+    "current": {
+      "sessions": 24580,
+      "bounceRate": 55.2,
+      "exitRate": 26.8,
+      "conversionToDetail": 18.4
+    },
+    "prior": {
+      "sessions": 23904,
+      "bounceRate": 57.1,
+      "exitRate": 28.3,
+      "conversionToDetail": 17.2
+    },
+    "dataQuality": {
+      "sufficiency": "high",
+      "hasRecentChanges": false,
+      "notes": ""
+    }
+  },
+  {
+    "id": "pdp-week-2026-04-01",
+    "page": "pdp",
+    "pageLabel": "Product Detail Page",
+    "period": {
+      "startDate": "2026-03-30",
+      "endDate": "2026-04-05"
+    },
+    "current": {
+      "sessions": 18340,
+      "bounceRate": 22.1,
+      "exitRate": 35.6,
+      "conversionToCart": 14.7
+    },
+    "prior": {
+      "sessions": 17820,
+      "bounceRate": 23.4,
+      "exitRate": 36.2,
+      "conversionToCart": 14.2
+    },
+    "dataQuality": {
+      "sufficiency": "high",
+      "hasRecentChanges": false,
+      "notes": ""
+    }
+  },
+  {
+    "id": "cart-week-2026-04-01",
+    "page": "cart",
+    "pageLabel": "Shopping Cart",
+    "period": {
+      "startDate": "2026-03-30",
+      "endDate": "2026-04-05"
+    },
+    "current": {
+      "sessions": 6820,
+      "bounceRate": 34.2,
+      "exitRate": 15.3,
+      "conversionToCheckout": 50.5
+    },
+    "prior": {
+      "sessions": 6540,
+      "bounceRate": 35.8,
+      "exitRate": 16.1,
+      "conversionToCheckout": 48.1
+    },
+    "dataQuality": {
+      "sufficiency": "high",
+      "hasRecentChanges": false,
+      "notes": ""
+    }
+  },
+  {
+    "id": "checkout-week-2026-04-01",
+    "page": "checkout",
+    "pageLabel": "Checkout",
+    "period": {
+      "startDate": "2026-03-30",
+      "endDate": "2026-04-05"
+    },
+    "current": {
+      "sessions": 3445,
+      "bounceRate": 42.1,
+      "exitRate": 2.8,
+      "conversionToConfirmation": 55.1
+    },
+    "prior": {
+      "sessions": 3142,
+      "bounceRate": 44.3,
+      "exitRate": 3.2,
+      "conversionToConfirmation": 52.5
+    },
+    "dataQuality": {
+      "sufficiency": "high",
+      "hasRecentChanges": false,
+      "notes": ""
+    }
+  }
+]

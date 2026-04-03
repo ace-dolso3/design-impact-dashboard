@@ -193,3 +193,162 @@ Releases with no revenue metrics score null and sort to the bottom.
 | Top 3 badges only | Badge all releases, tiered labels | Clean signal without over-labeling; instantly legible |
 | Chronological as default sort | Revenue ranking as default | Preserves existing narrative; ranking is an on-demand view |
 | Sort toggle in section header | Separate filter bar, dropdown | Consistent with existing "Collapse All" control placement |
+
+---
+
+## Feature: Leak Finder (Pre-Design Planning)
+
+**Date:** 2026-04-02  
+**Status:** Brainstorming complete, design validated, implementation not started
+
+### Understanding Summary
+
+- Build a self-serve way for Product and Design leads to answer: "Where is this page leaking users before we start design work?"
+- Keep the first version focused on page-level diagnostics, not full journey analysis.
+- Default page set is PLP, PDP, Cart, and Checkout.
+- Natural-language querying is a future direction, but V1 should avoid AI/runtime integration.
+- V1 interaction is a guided form that returns a standardized leak report.
+- Data refresh cadence is weekly, with one owner handling updates and QA.
+- The system stays internal-only, aggregated only, low-scale, and best-effort for reliability.
+
+### Explicit Non-Goals
+
+- No free-form natural-language query interface in V1.
+- No customer-level or personally identifiable data.
+- No requirement for real-time analytics ingestion.
+- No attempt to replace full analytics platforms.
+
+### Assumptions
+
+- Internal dashboard users are approximately 5-15 weekly active users.
+- Response times up to 30 seconds are acceptable if results are richer and actionable.
+- Users prefer consistent, explainable outputs over flexible but complex query tooling.
+- Weekly snapshot data is sufficient to support pre-design planning decisions.
+
+### Design Approaches Evaluated
+
+1. Guided Leak Finder playbooks (recommended)
+2. Flexible question builder
+3. Request-to-insight queue (manual human-in-the-loop)
+
+Recommended path: start with playbooks for speed, clarity, and low maintenance; then add selective flexibility only if demand proves it.
+
+### V1 Architecture
+
+Three layers:
+
+1. Data Prep Layer (weekly, owner-operated)
+- Curated snapshots for PLP/PDP/Cart/Checkout with current values, comparison values, and deltas.
+
+2. Insight Engine Layer (in-browser deterministic rules)
+- Computes leakage severity and ranks contributing signals.
+- No model inference required.
+
+3. Guided Interaction Layer (self-serve)
+- Inputs: page, date range, optional segment, comparison mode.
+- Output: standardized leak report with status, top drivers, and next investigation prompts.
+
+### Leak Report Output Contract
+
+Each result should always include:
+
+1. Status: Healthy, Watch, or At Risk
+2. Leak score and key metric deltas
+3. Top 3 contributing signals
+4. Suggested investigation prompts for design discovery
+5. Confidence indicator with caveats
+
+### Scoring and Thresholds
+
+Initial rule-based score:
+
+LeakScore = wb * DeltaBounce + we * DeltaExit + wc * (-DeltaConversion)
+
+Initial weights:
+
+- wb = 0.35
+- we = 0.35
+- wc = 0.30
+
+Initial severity bands:
+
+- Healthy: score < 0.20
+- Watch: score 0.20-0.49
+- At Risk: score >= 0.50
+
+### Reliability and Error Handling
+
+- Validate all inputs before execution.
+- If data volume is too low, return "insufficient evidence" instead of forcing a decision.
+- Flag known instrumentation changes and reduce confidence accordingly.
+- If selected segment data is unavailable, degrade to aggregate and disclose the fallback.
+- Every failure state must explain cause and next step.
+
+### Non-Functional Requirements
+
+- Performance: rich answer acceptable up to 30 seconds.
+- Scale: 5-15 weekly internal users.
+- Privacy/security: internal-only, aggregated data only.
+- Availability: best-effort internal tool.
+- Maintainability: weekly refresh workflow with one owner.
+
+### Testing Strategy
+
+1. Rule correctness tests
+- Validate sign handling for lower-is-better metrics.
+- Validate threshold band classification at boundaries.
+
+2. UX trust tests
+- Confirm all report states render with explanation and confidence details.
+- Confirm caveat banners appear for low-data and instrumentation-change scenarios.
+
+3. Workflow reliability tests
+- Simulate stale or partial weekly snapshots and verify graceful degradation.
+- Verify deterministic repeatability for identical inputs.
+
+4. User acceptance checks (Product + Design leads)
+- Can users independently answer leak-location questions for default pages?
+- Do suggested prompts produce clear next design-investigation steps?
+
+### Decision Log
+
+| Decision | Alternatives Considered | Why |
+|---|---|---|
+| Primary expansion use case is pre-design planning | Post-release evaluation, experiment governance, portfolio steering | Matches immediate team need to decide what to design next |
+| Audience is Product + Design leads | Product-only, broader org access | Balances usefulness and governance for V1 |
+| Focus question is leak location | Trend-only, segment-only, hypothesis-only | Most actionable first question before design work |
+| Page-level scope for V1 | Flow-level first, hybrid start | Lowest complexity with fastest path to self-serve value |
+| Default pages PLP/PDP/Cart/Checkout | Custom per-quarter list | Covers key ecommerce decision surfaces |
+| Guided form for V1 | Natural language, templates-only, manual queue | Best fit without AI integration and still self-serve |
+| Weekly refresh cadence | Daily, near-real-time | Sustainable with single-owner operations |
+| Deterministic scoring engine | Heuristic-only labels, ML scoring | Transparent, explainable, maintainable |
+| Internal aggregated data only | Deeper user-level detail | Aligns with privacy constraints and lower risk |
+
+### Risks and Mitigations
+
+- Risk: score becomes over-trusted despite data quality gaps.
+  Mitigation: confidence labeling and explicit caveats are mandatory.
+
+- Risk: single-owner refresh process becomes a bottleneck.
+  Mitigation: keep data schema constrained and process checklist-driven.
+
+- Risk: users request open-ended questions quickly.
+  Mitigation: plan a V2 path to controlled flexibility after usage evidence.
+
+### Future Expansion Use Cases
+
+Potential next use cases after Leak Finder stabilizes:
+
+1. Trend regression guardrails by page over rolling windows.
+2. Segment-aware leak diagnosis for device and traffic cohorts.
+3. Hypothesis queue generation from repeated leak patterns.
+4. Pre-design brief generator linking leaks to design investigation prompts.
+5. Portfolio prioritization that combines leak severity with opportunity size.
+
+### Exit Criteria Status for Brainstorming
+
+- Understanding lock confirmed: yes
+- At least one approach explicitly accepted: yes
+- Major assumptions documented: yes
+- Key risks acknowledged: yes
+- Decision log complete: yes
