@@ -3,7 +3,7 @@
     "id": "ado-2026-03-26-1",
     "title": "YardRx Email, Order Messaging & Compliance Updates",
     "date": "2026-03-26",
-    "description": "Enhanced order confirmation emails to surface product availability and regulatory compliance information, ensuring customers understand material restrictions and upcoming product shipments. Updated YardRx service communications with improved renewal reminders and order status visibility, so subscribers have clear windows into their recurring deliveries and can plan accordingly.\n\nUnified messaging across all order confirmation touchpoints — from payment confirmation through delivery — giving customers confidence in their fulfillment timeline.",
+    "description": "5 completed work items were released on 2026-03-26 with a primary focus on Fulfillment & Order Flow, Order Communications, YardRx Experience.\n\nThe rollout centered on Update Peel & Stick Availability for Paint PDPs and CA Battery Regulation Update to Order Received email, improving task completion clarity and reducing friction in key customer journeys.",
     "items": [
       {
         "id": 118723,
@@ -38,6 +38,22 @@
     ],
     "metrics": [
       {
+        "name": "Weekly Revenue",
+        "category": "revenue",
+        "before": 117755,
+        "after": 108586,
+        "unit": "$",
+        "lower_is_better": false
+      },
+      {
+        "name": "Site Conversion Rate",
+        "category": "conversion",
+        "before": 0.84,
+        "after": 0.93,
+        "unit": "%",
+        "lower_is_better": false
+      },
+      {
         "name": "Site Bounce Rate",
         "category": "engagement",
         "before": 16.96,
@@ -46,25 +62,28 @@
         "lower_is_better": true
       },
       {
-        "name": "Pageviews per Session",
-        "category": "engagement",
-        "before": 6.54,
-        "after": 7.04,
-        "unit": ""
-      },
-      {
         "name": "Weekly Sessions",
         "category": "engagement",
         "before": 111835,
         "after": 103240,
-        "unit": ""
+        "unit": "",
+        "lower_is_better": false
       },
       {
-        "name": "Weekly Revenue",
-        "category": "revenue",
-        "before": 117755,
-        "after": 108586,
-        "unit": "$"
+        "name": "Avg Session Duration",
+        "category": "engagement",
+        "before": 234.09,
+        "after": 284.92,
+        "unit": "s",
+        "lower_is_better": false
+      },
+      {
+        "name": "Estimated Orders",
+        "category": "conversion",
+        "before": 938,
+        "after": 965,
+        "unit": "",
+        "lower_is_better": false
       }
     ]
   },
@@ -72,7 +91,7 @@
     "id": "ado-2026-03-25-2",
     "title": "Store Operations, Returns & BOPIS Copy Updates",
     "date": "2026-03-25",
-    "description": "Refined in-store fulfillment messaging across BOPIS (Buy Online, Pick Up In Store) and curbside pickup experiences to help customers clearly understand their fulfillment options. Improved associate screens to surface returns-in-store processes, making it easier for retail staff to manage in-store pickup and return transactions.\n\nFixed order recovery logic for cancelled orders to ensure accurate downstream fulfillment workflows, preventing gaps in financial or inventory reconciliation.",
+    "description": "3 completed work items were released on 2026-03-25 with a primary focus on Fulfillment & Order Flow, Order Communications.\n\nThe rollout centered on Consumer Direct Dropship and Finance, improving task completion clarity and reducing friction in key customer journeys.",
     "items": [
       {
         "id": 61287,
@@ -95,6 +114,22 @@
     ],
     "metrics": [
       {
+        "name": "Weekly Revenue",
+        "category": "revenue",
+        "before": 122466,
+        "after": 108696,
+        "unit": "$",
+        "lower_is_better": false
+      },
+      {
+        "name": "Site Conversion Rate",
+        "category": "conversion",
+        "before": 0.87,
+        "after": 0.94,
+        "unit": "%",
+        "lower_is_better": false
+      },
+      {
         "name": "Site Bounce Rate",
         "category": "engagement",
         "before": 17.25,
@@ -103,25 +138,28 @@
         "lower_is_better": true
       },
       {
-        "name": "Avg Session Duration",
-        "category": "engagement",
-        "before": 236.74,
-        "after": 285.24,
-        "unit": "s"
-      },
-      {
         "name": "Weekly Sessions",
         "category": "engagement",
         "before": 108155,
         "after": 98916,
-        "unit": ""
+        "unit": "",
+        "lower_is_better": false
       },
       {
-        "name": "Weekly Revenue",
-        "category": "revenue",
-        "before": 122466,
-        "after": 108696,
-        "unit": "$"
+        "name": "Avg Session Duration",
+        "category": "engagement",
+        "before": 236.74,
+        "after": 285.24,
+        "unit": "s",
+        "lower_is_better": false
+      },
+      {
+        "name": "Estimated Orders",
+        "category": "conversion",
+        "before": 945,
+        "after": 926,
+        "unit": "",
+        "lower_is_better": false
       }
     ]
   },
@@ -129,7 +167,7 @@
     "id": "ado-2026-03-12-3",
     "title": "Checkout & Payments + Fulfillment & Order Flow Updates",
     "date": "2026-03-12",
-    "description": "Strengthened fraud detection by improving how parent order data flows to risk assessment systems, protecting against promotional abuse by properly tracking BOGA (buy one get another) order structures. Updated chargeback handling for split orders to ensure accurate financial reporting and payment integrity across complex promotional scenarios.\n\nThese changes reduce exposure to bad-actor promotional exploitation while maintaining smooth checkout experiences for legitimate customers.",
+    "description": "2 completed work items were released on 2026-03-12 with a primary focus on Checkout & Payments, Fulfillment & Order Flow.\n\nThe rollout centered on Send Parent Checkout order number to Riskified to avoid BOGA free product pickups / deliveries and FPMR, improving task completion clarity and reducing friction in key customer journeys.",
     "items": [
       {
         "id": 185545,
@@ -146,6 +184,22 @@
     ],
     "metrics": [
       {
+        "name": "Weekly Revenue",
+        "category": "revenue",
+        "before": 118387,
+        "after": 105473,
+        "unit": "$",
+        "lower_is_better": false
+      },
+      {
+        "name": "Site Conversion Rate",
+        "category": "conversion",
+        "before": 0.68,
+        "after": 1.01,
+        "unit": "%",
+        "lower_is_better": false
+      },
+      {
         "name": "Site Bounce Rate",
         "category": "engagement",
         "before": 16.11,
@@ -154,25 +208,28 @@
         "lower_is_better": true
       },
       {
-        "name": "Site Conversion Rate",
-        "category": "conversion",
-        "before": 0.68,
-        "after": 1.01,
-        "unit": "%"
+        "name": "Weekly Sessions",
+        "category": "engagement",
+        "before": 127563,
+        "after": 80055,
+        "unit": "",
+        "lower_is_better": false
       },
       {
         "name": "Avg Session Duration",
         "category": "engagement",
         "before": 200.55,
         "after": 273.55,
-        "unit": "s"
+        "unit": "s",
+        "lower_is_better": false
       },
       {
-        "name": "Weekly Revenue",
-        "category": "revenue",
-        "before": 118387,
-        "after": 105473,
-        "unit": "$"
+        "name": "Estimated Orders",
+        "category": "conversion",
+        "before": 869,
+        "after": 808,
+        "unit": "",
+        "lower_is_better": false
       }
     ]
   },
@@ -180,7 +237,7 @@
     "id": "ado-2026-03-11-4",
     "title": "Fulfillment & Order Flow Release Updates",
     "date": "2026-03-11",
-    "description": "Improved Fulfillment & Payment Reconciliation (FPMR) reporting infrastructure to surface detailed order information for financial analysis and reconciliation accuracy. This enables operations teams to quickly identify discrepancies and ensure data integrity across the fulfillment pipeline.",
+    "description": "1 completed work items were released on 2026-03-11 with a primary focus on Fulfillment & Order Flow.\n\nThe rollout centered on FPMR, improving task completion clarity and reducing friction in key customer journeys.",
     "items": [
       {
         "id": 167558,
@@ -191,6 +248,22 @@
     ],
     "metrics": [
       {
+        "name": "Weekly Revenue",
+        "category": "revenue",
+        "before": 119943,
+        "after": 95438,
+        "unit": "$",
+        "lower_is_better": false
+      },
+      {
+        "name": "Site Conversion Rate",
+        "category": "conversion",
+        "before": 0.71,
+        "after": 0.92,
+        "unit": "%",
+        "lower_is_better": false
+      },
+      {
         "name": "Site Bounce Rate",
         "category": "engagement",
         "before": 14.87,
@@ -199,25 +272,28 @@
         "lower_is_better": true
       },
       {
-        "name": "Avg Session Duration",
-        "category": "engagement",
-        "before": 204.42,
-        "after": 263.04,
-        "unit": "s"
-      },
-      {
         "name": "Weekly Sessions",
         "category": "engagement",
         "before": 121289,
         "after": 85338,
-        "unit": ""
+        "unit": "",
+        "lower_is_better": false
       },
       {
-        "name": "Weekly Revenue",
-        "category": "revenue",
-        "before": 119943,
-        "after": 95438,
-        "unit": "$"
+        "name": "Avg Session Duration",
+        "category": "engagement",
+        "before": 204.42,
+        "after": 263.04,
+        "unit": "s",
+        "lower_is_better": false
+      },
+      {
+        "name": "Estimated Orders",
+        "category": "conversion",
+        "before": 866,
+        "after": 788,
+        "unit": "",
+        "lower_is_better": false
       }
     ]
   },
@@ -225,7 +301,7 @@
     "id": "ado-2026-03-06-5",
     "title": "YardRx Experience Release Updates",
     "date": "2026-03-06",
-    "description": "Fixed recurring order transfer logic to eliminate unnecessary inventory reassignments in YardRx subscription workflows. This ensures that subscription customers receive consistent, predictable delivery experiences without unexpected changes to their scheduled items — improving trust in the recurring service.",
+    "description": "1 completed work items were released on 2026-03-06 with a primary focus on YardRx Experience.\n\nThe rollout centered on YardRx Renewals, improving task completion clarity and reducing friction in key customer journeys.",
     "items": [
       {
         "id": 186298,
@@ -235,6 +311,22 @@
       }
     ],
     "metrics": [
+      {
+        "name": "Weekly Revenue",
+        "category": "revenue",
+        "before": 107646,
+        "after": 115767,
+        "unit": "$",
+        "lower_is_better": false
+      },
+      {
+        "name": "Site Conversion Rate",
+        "category": "conversion",
+        "before": 0.77,
+        "after": 0.71,
+        "unit": "%",
+        "lower_is_better": false
+      },
       {
         "name": "Site Bounce Rate",
         "category": "engagement",
@@ -248,21 +340,24 @@
         "category": "engagement",
         "before": 98527,
         "after": 122921,
-        "unit": ""
+        "unit": "",
+        "lower_is_better": false
       },
       {
-        "name": "Pageviews per Session",
+        "name": "Avg Session Duration",
         "category": "engagement",
-        "before": 6.66,
-        "after": 6.39,
-        "unit": ""
+        "before": 227.8,
+        "after": 206.43,
+        "unit": "s",
+        "lower_is_better": false
       },
       {
-        "name": "Weekly Revenue",
-        "category": "revenue",
-        "before": 107646,
-        "after": 115767,
-        "unit": "$"
+        "name": "Estimated Orders",
+        "category": "conversion",
+        "before": 756,
+        "after": 877,
+        "unit": "",
+        "lower_is_better": false
       }
     ]
   },
@@ -270,7 +365,7 @@
     "id": "ado-2026-03-05-6",
     "title": "Browse & PDP Experience + Fulfillment & Order Flow Updates",
     "date": "2026-03-05",
-    "description": "Powered product discovery with new personalization capabilities: launched custom recommendation variables to surface relevant items across search results and product detail pages. Enhanced filtering options on product listing pages and refined promotional display logic to ensure delivery offers accurately reflect regional availability.\n\nOptimized product recommendation placement for organic search visibility and improved error page navigation to help customers recover and find products easily. These changes work together to reduce friction in the path to purchase while surfacing more relevant recommendations.",
+    "description": "6 completed work items were released on 2026-03-05 with a primary focus on Browse & PDP Experience, Fulfillment & Order Flow, Checkout & Payments.\n\nThe rollout centered on Prod Recs: Add Custom Variable to API and Free Ace Rewards Delivery Legal Modal Text Fix, improving task completion clarity and reducing friction in key customer journeys.",
     "items": [
       {
         "id": 169532,
@@ -311,6 +406,22 @@
     ],
     "metrics": [
       {
+        "name": "Weekly Revenue",
+        "category": "revenue",
+        "before": 104273,
+        "after": 118387,
+        "unit": "$",
+        "lower_is_better": false
+      },
+      {
+        "name": "Site Conversion Rate",
+        "category": "conversion",
+        "before": 0.81,
+        "after": 0.68,
+        "unit": "%",
+        "lower_is_better": false
+      },
+      {
         "name": "Site Bounce Rate",
         "category": "engagement",
         "before": 15.4,
@@ -319,25 +430,28 @@
         "lower_is_better": true
       },
       {
-        "name": "Site Conversion Rate",
-        "category": "conversion",
-        "before": 0.81,
-        "after": 0.68,
-        "unit": "%"
+        "name": "Weekly Sessions",
+        "category": "engagement",
+        "before": 93730,
+        "after": 127563,
+        "unit": "",
+        "lower_is_better": false
       },
       {
         "name": "Avg Session Duration",
         "category": "engagement",
         "before": 235.88,
         "after": 200.55,
-        "unit": "s"
+        "unit": "s",
+        "lower_is_better": false
       },
       {
-        "name": "Weekly Revenue",
-        "category": "revenue",
-        "before": 104273,
-        "after": 118387,
-        "unit": "$"
+        "name": "Estimated Orders",
+        "category": "conversion",
+        "before": 758,
+        "after": 869,
+        "unit": "",
+        "lower_is_better": false
       }
     ]
   },
@@ -345,7 +459,7 @@
     "id": "ado-2026-03-04-7",
     "title": "Fulfillment & Order Flow + YardRx Experience Updates",
     "date": "2026-03-04",
-    "description": "Expanded YardRx service options by allowing retailers to set preferred mulch brands for recurring orders — improving yard care personalization for landscape contractors and DIY customers. Refined inventory quantity handling to prevent data conversion errors, ensuring accurate stock levels and preventing ordering mistakes.\n\nThese improvements give field personnel more control over service delivery while reducing operational friction in inventory workflows.",
+    "description": "2 completed work items were released on 2026-03-04 with a primary focus on Fulfillment & Order Flow, YardRx Experience.\n\nThe rollout centered on YardRX and Inventory Outs on AH.com, improving task completion clarity and reducing friction in key customer journeys.",
     "items": [
       {
         "id": 170563,
@@ -362,6 +476,22 @@
     ],
     "metrics": [
       {
+        "name": "Weekly Revenue",
+        "category": "revenue",
+        "before": 102026,
+        "after": 119943,
+        "unit": "$",
+        "lower_is_better": false
+      },
+      {
+        "name": "Site Conversion Rate",
+        "category": "conversion",
+        "before": 0.8,
+        "after": 0.71,
+        "unit": "%",
+        "lower_is_better": false
+      },
+      {
         "name": "Site Bounce Rate",
         "category": "engagement",
         "before": 15.73,
@@ -374,21 +504,24 @@
         "category": "engagement",
         "before": 93885,
         "after": 121289,
-        "unit": ""
+        "unit": "",
+        "lower_is_better": false
       },
       {
-        "name": "Pageviews per Session",
+        "name": "Avg Session Duration",
         "category": "engagement",
-        "before": 6.58,
-        "after": 6.49,
-        "unit": ""
+        "before": 234.93,
+        "after": 204.42,
+        "unit": "s",
+        "lower_is_better": false
       },
       {
-        "name": "Weekly Revenue",
-        "category": "revenue",
-        "before": 102026,
-        "after": 119943,
-        "unit": "$"
+        "name": "Estimated Orders",
+        "category": "conversion",
+        "before": 754,
+        "after": 866,
+        "unit": "",
+        "lower_is_better": false
       }
     ]
   },
@@ -396,7 +529,7 @@
     "id": "ado-2026-02-18-8",
     "title": "Bundles & Kits Release Updates",
     "date": "2026-02-18",
-    "description": "Enhanced bundle management infrastructure with improved Power BI reporting to track bundle performance and data quality. Fixed back-end systems to prevent bundle headers from appearing incorrectly in receiving documentation and portal views, streamlining operations for back-office and field teams.\n\nThese changes ensure accurate bundle visibility across supply chain systems and enable better visibility into bundle performance metrics.",
+    "description": "3 completed work items were released on 2026-02-18 with a primary focus on Bundles & Kits.\n\nThe rollout centered on MBK: Power BI Report and Bundle Header sku is displaying on the Management/Receiving doc in ACENET, improving task completion clarity and reducing friction in key customer journeys.",
     "items": [
       {
         "id": 137842,
@@ -419,6 +552,22 @@
     ],
     "metrics": [
       {
+        "name": "Weekly Revenue",
+        "category": "revenue",
+        "before": 85561,
+        "after": 71393,
+        "unit": "$",
+        "lower_is_better": false
+      },
+      {
+        "name": "Site Conversion Rate",
+        "category": "conversion",
+        "before": 0.69,
+        "after": 0.76,
+        "unit": "%",
+        "lower_is_better": false
+      },
+      {
         "name": "Site Bounce Rate",
         "category": "engagement",
         "before": 23.55,
@@ -431,21 +580,24 @@
         "category": "engagement",
         "before": 99973,
         "after": 88146,
-        "unit": ""
+        "unit": "",
+        "lower_is_better": false
       },
       {
-        "name": "Pageviews per Session",
+        "name": "Avg Session Duration",
         "category": "engagement",
-        "before": 5.72,
-        "after": 6.51,
-        "unit": ""
+        "before": 206.93,
+        "after": 229.83,
+        "unit": "s",
+        "lower_is_better": false
       },
       {
-        "name": "Weekly Revenue",
-        "category": "revenue",
-        "before": 85561,
-        "after": 71393,
-        "unit": "$"
+        "name": "Estimated Orders",
+        "category": "conversion",
+        "before": 688,
+        "after": 673,
+        "unit": "",
+        "lower_is_better": false
       }
     ]
   },
@@ -453,7 +605,7 @@
     "id": "ado-2026-02-12-9",
     "title": "Fulfillment & Order Flow + Browse & PDP Experience Updates",
     "date": "2026-02-12",
-    "description": "Launched Phase 1 of major YardRx recurring delivery improvements, enabling customers to add items to upcoming orders directly from cart and results pages. Enhanced yard profile management with new size editing capabilities and service preference controls, giving customers finer control over their subscriptions.\n\nIntroduced promotional discount visibility at checkout and results stages, added order tracking indicators to distinguish online vs. mobile orders, and updated fulfillment documentation with application instructions for accuracy. Powered personalized communications with customer ID tracking in transactional emails, and refreshed product listing page design with modern UI patterns — making browse, discovery, and recurring order management feel cohesive and intuitive.",
+    "description": "12 completed work items were released on 2026-02-12 with a primary focus on Fulfillment & Order Flow, Browse & PDP Experience, Order Communications.\n\nThe rollout centered on Monetate Session Count Update and PLP Design Updates, improving task completion clarity and reducing friction in key customer journeys.",
     "items": [
       {
         "id": 119393,
@@ -530,6 +682,22 @@
     ],
     "metrics": [
       {
+        "name": "Weekly Revenue",
+        "category": "revenue",
+        "before": 62287,
+        "after": 79777,
+        "unit": "$",
+        "lower_is_better": false
+      },
+      {
+        "name": "Site Conversion Rate",
+        "category": "conversion",
+        "before": 0.71,
+        "after": 0.67,
+        "unit": "%",
+        "lower_is_better": false
+      },
+      {
         "name": "Site Bounce Rate",
         "category": "engagement",
         "before": 29.19,
@@ -538,25 +706,28 @@
         "lower_is_better": true
       },
       {
-        "name": "Pageviews per Session",
-        "category": "engagement",
-        "before": 5.36,
-        "after": 5.77,
-        "unit": ""
-      },
-      {
         "name": "Weekly Sessions",
         "category": "engagement",
         "before": 88981,
         "after": 98516,
-        "unit": ""
+        "unit": "",
+        "lower_is_better": false
       },
       {
-        "name": "Weekly Revenue",
-        "category": "revenue",
-        "before": 62287,
-        "after": 79777,
-        "unit": "$"
+        "name": "Avg Session Duration",
+        "category": "engagement",
+        "before": 212.44,
+        "after": 208.67,
+        "unit": "s",
+        "lower_is_better": false
+      },
+      {
+        "name": "Estimated Orders",
+        "category": "conversion",
+        "before": 636,
+        "after": 660,
+        "unit": "",
+        "lower_is_better": false
       }
     ]
   }
